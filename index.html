@@ -491,28 +491,18 @@
                 waveColor: isVocab ? 'bg-orange-400' : isPhrase ? 'bg-blue-400' : isAffix ? 'bg-emerald-400' : isExam ? 'bg-purple-400' : 'bg-rose-400'
             };
         }
-
+        
         let globalAudioCtx = null;
         function initAudioContext() {
             try {
-                if (!globalAudioCtx) {
-                    globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (globalAudioCtx.state === 'suspended') {
-                    globalAudioCtx.resume();
-                }
+                if (!globalAudioCtx) globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (globalAudioCtx.state === 'suspended') globalAudioCtx.resume();
             } catch (e) {}
             return globalAudioCtx;
         }
 
-        // 補強：讓手機每次點擊或觸碰時都持續確保音效解鎖
-        document.addEventListener('click', () => {
-            initAudioContext();
-        }, { once: false });
-
-        document.addEventListener('touchstart', () => {
-            initAudioContext();
-        }, { once: false });
+        document.addEventListener('click', initAudioContext, { once: true });
+        document.addEventListener('touchstart', initAudioContext, { once: true });
 
         function playSound(type) {
             try {
