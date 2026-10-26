@@ -74,9 +74,9 @@
                 <button onclick="openStatsModal()" class="flex items-center gap-2 px-3 py-1.5 bg-slate-900/90 border border-slate-800 hover:border-orange-500/30 rounded-xl transition-all hover:bg-slate-800 active:scale-95 group">
                     <span class="text-sm font-black text-orange-400 group-hover:scale-105 transition-transform"><i class="fa-solid fa-chart-line mr-1"></i> 修行法海</span>
                 </button>
-                <div onclick="openSyncSettingsModal()" id="header-sync-badge" class="flex items-center gap-2 px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded-xl cursor-pointer transition-all active:scale-95 text-slate-400 hover:text-blue-400 group" title="雲端同步法陣設定">
+                <div onclick="openSyncSettingsModal()" id="header-sync-badge" class="flex items-center gap-2 px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded-xl cursor-pointer transition-all active:scale-95 text-slate-400 hover:text-blue-400 group" title="點擊重新同步或設定雲端法陣">
                     <i id="header-sync-icon" class="fa-solid fa-cloud animate-pulse text-base"></i>
-                    <span id="header-sync-status" class="text-xs font-bold">自動同步中</span>
+                    <span id="header-sync-status" class="text-xs font-bold">同步準備中</span>
                 </div>
                 <div class="h-6 w-[1px] bg-slate-800 hidden md:block"></div>
                 <div class="flex items-center gap-2 px-1 sm:px-2">
@@ -336,7 +336,7 @@
             </div>
             <div class="flex flex-col gap-3">
                 <div>
-                    <label class="block text-[10px] text-blue-300 font-extrabold mb-1">GitHub JSON Raw URL</label>
+                    <label class="block text-[10px] text-blue-300 font-extrabold mb-1">GitHub JSON Raw URL 清單 (系統已自動掃描 GitHub 儲存庫)</label>
                     <textarea id="modal-sync-url-input" rows="4" class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-xl text-xs font-semibold text-slate-200 outline-none transition-colors custom-scrollbar resize-none"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
@@ -391,26 +391,26 @@
     </div>
 
     <script>
-        // 統一採用 raw.githubusercontent.com 直連格式，避免 GitHub blob 跨網域 CORS 跳轉失敗
+        // 標準化 GitHub 題庫清單
         const DEFAULT_SYNC_URLS_ARRAY = [
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/affix.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/exam_advanced.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/exam_basic.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/exam_intermediate.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/vocab_advanced.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/vocab_basic.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/vocab_intermediate.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/inversion.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E4%BA%94%E5%A4%A7%E5%8F%A5%E5%9E%8B%E6%96%87%E6%B3%95.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E5%85%AB%E5%A4%A7%E8%A9%9E%E9%A1%9E%E6%96%87%E6%B3%95.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E5%89%AF%E8%A9%9E%E5%AD%90%E5%8F%A5.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E5%8F%A5%E5%9E%8B%E7%B5%90%E6%A7%8B%E6%96%87%E6%B3%95.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E5%90%8D%E8%A9%9E%E5%AD%90%E5%8F%A5.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E7%89%B9%E6%AE%8A%E5%8B%95%E8%A9%9E.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E8%99%9B%E4%B8%BB%E8%A9%9E.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E9%97%9C%E4%BF%82%E4%BB%A3%E5%90%8D%E8%A9%9E.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/12%E6%99%82%E6%85%8B.json",
-            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/Irregular%20Verbs%20Table.json"
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/affix.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/exam_advanced.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/exam_basic.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/exam_intermediate.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/vocab_advanced.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/vocab_basic.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/vocab_intermediate.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/inversion.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/%E4%BA%94%E5%A4%A7%E5%8F%A5%E5%9E%8B%E6%96%87%E6%B3%95.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/%E5%85%AB%E5%A4%A7%E8%A9%9E%E9%A1%9E%E6%96%87%E6%B3%95.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/%E5%89%AF%E8%A9%9E%E5%AD%90%E5%8F%A5.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/%E5%8F%A5%E5%9E%8B%E7%B5%90%E6%A7%8B%E6%96%87%E6%B3%95.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/%E5%90%8D%E8%A9%9E%E5%AD%90%E5%8F%A5.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/%E7%89%B9%E6%AE%8A%E5%8B%95%E8%A9%9E.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/%E8%99%9B%E4%B8%BB%E8%A9%9E.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/%E9%97%9C%E4%BF%82%E4%BB%A3%E5%90%8D%E8%A9%9E.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/12%E6%99%82%E6%85%8B.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/main/Irregular%20Verbs%20Table.json"
         ];
         const DEFAULT_SYNC_URLS = DEFAULT_SYNC_URLS_ARRAY.join('\n');
 
@@ -428,14 +428,254 @@
             { id: 'advanced', name: '中高級單字', examName: '中高級考題' }
         ];
 
-        function normalizeGithubRawUrl(rawUrl) {
-            let url = rawUrl.trim();
-            if (!url) return '';
-            url = url.replace(/\?raw=true$/i, '');
-            if (/^https:\/\/github\.com\//i.test(url)) {
-                url = url.replace(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/i, 'https://raw.githubusercontent.com/$1/$2/refs/heads/$3/$4');
+        // 將任何 GitHub 網址轉換為標準 Raw 網址，並提供 jsDelivr 備援網址
+        function getCandidateUrls(rawUrl) {
+            let u = rawUrl.trim();
+            if (!u) return [];
+            u = u.replace(/\?raw=true$/i, '');
+            let candidates = [];
+            if (/^https:\/\/github\.com\//i.test(u)) {
+                const m = u.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/i);
+                if (m) {
+                    const [, owner, repo, branch, file] = m;
+                    const encodedFile = file.split('/').map(p => encodeURIComponent(decodeURIComponent(p))).join('/');
+                    candidates.push(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodedFile}`);
+                    candidates.push(`https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/${branch}/${encodedFile}`);
+                    candidates.push(`https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${encodedFile}`);
+                    return candidates;
+                }
             }
-            return url;
+            if (/^https:\/\/raw\.githubusercontent\.com\//i.test(u)) {
+                const cleanU = u.replace('/refs/heads/', '/');
+                candidates.push(cleanU);
+                candidates.push(u);
+                const m = cleanU.match(/^https:\/\/raw\.githubusercontent\.com\/([^/]+)\/([^/]+)\/([^/]+)\/(.+)$/i);
+                if (m) {
+                    const [, owner, repo, branch, file] = m;
+                    candidates.push(`https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${file}`);
+                }
+                return [...new Set(candidates)];
+            }
+            return [u];
+        }
+
+        // 雙向智慧容錯抓取：主線失敗自動切備援線路
+        async function fetchJsonWithFallback(rawUrl) {
+            const urls = getCandidateUrls(rawUrl);
+            for (const url of urls) {
+                try {
+                    const res = await fetch(url, { cache: 'no-store' });
+                    if (res.ok) {
+                        const text = await res.text();
+                        const cleanText = text.replace(/^\uFEFF/, '').trim();
+                        return JSON.parse(cleanText);
+                    }
+                } catch (e) {}
+            }
+            throw new Error(`無法載入: ${rawUrl}`);
+        }
+
+        // 根據網址檔名或中文關鍵字，自動判斷該檔案屬於哪個練功房與單元
+        function detectCategoryFromUrl(urlStr) {
+            let decoded = "";
+            try { decoded = decodeURIComponent(urlStr).toLowerCase(); } catch (e) { decoded = urlStr.toLowerCase(); }
+
+            if (decoded.includes('affix') || decoded.includes('字根') || decoded.includes('字首')) return { dojo: 'affix', sub: null };
+            if (decoded.includes('phrase') || decoded.includes('片語')) return { dojo: 'phrase', sub: null };
+
+            if (decoded.includes('exam_basic') || decoded.includes('初級考題')) return { dojo: 'exam', sub: 'basic' };
+            if (decoded.includes('exam_intermediate') || decoded.includes('中級考題')) return { dojo: 'exam', sub: 'intermediate' };
+            if (decoded.includes('exam_advanced') || decoded.includes('中高級考題') || decoded.includes('高級考題')) return { dojo: 'exam', sub: 'advanced' };
+
+            if (decoded.includes('vocab_basic') || decoded.includes('初級單字')) return { dojo: 'vocab', sub: 'basic' };
+            if (decoded.includes('vocab_intermediate') || decoded.includes('中級單字')) return { dojo: 'vocab', sub: 'intermediate' };
+            if (decoded.includes('vocab_advanced') || decoded.includes('中高級單字') || decoded.includes('高級單字')) return { dojo: 'vocab', sub: 'advanced' };
+
+            if (decoded.includes('五大句型') || decoded.includes('pattern')) return { dojo: 'grammar', sub: 'pattern' };
+            if (decoded.includes('八大詞類') || decoded.includes('pos')) return { dojo: 'grammar', sub: 'pos' };
+            if (decoded.includes('特殊動詞') || decoded.includes('special_verb')) return { dojo: 'grammar', sub: 'special_verbs' };
+            if (decoded.includes('12時態') || decoded.includes('時態') || decoded.includes('tense')) return { dojo: 'grammar', sub: 'tense' };
+            if (decoded.includes('關係代名詞') || decoded.includes('relative')) return { dojo: 'grammar', sub: 'relative' };
+            if (decoded.includes('名詞子句') || decoded.includes('noun_clause')) return { dojo: 'grammar', sub: 'noun_clause' };
+            if (decoded.includes('副詞子句') || decoded.includes('adv_clause')) return { dojo: 'grammar', sub: 'adv_clause' };
+            if (decoded.includes('情緒形容詞') || decoded.includes('emo_adj')) return { dojo: 'grammar', sub: 'emo_adj' };
+            if (decoded.includes('虛主詞') || decoded.includes('dummy_subj')) return { dojo: 'grammar', sub: 'dummy_subj' };
+            if (decoded.includes('倒裝') || decoded.includes('inversion')) return { dojo: 'grammar', sub: 'inversion' };
+            if (decoded.includes('特殊句型') || decoded.includes('special_pattern')) return { dojo: 'grammar', sub: 'special_pattern' };
+            if (decoded.includes('句型結構') || decoded.includes('structure_review')) return { dojo: 'grammar', sub: 'structure_review' };
+            if (decoded.includes('閱讀') || decoded.includes('reading')) return { dojo: 'grammar', sub: 'reading' };
+            if (decoded.includes('irregular') || decoded.includes('三態')) return { dojo: 'grammar', sub: 'Irregular Verbs Table' };
+
+            return null;
+        }
+
+        // 萬用智慧解析器：支援完整樹狀結構、關卡物件 {"1": [...]}、或純陣列 [...]
+        function smartParseAndMerge(rawData, sourceUrl = "", isOverwrite = false) {
+            if (!rawData || typeof rawData !== 'object') return 0;
+            let addedCount = 0;
+
+            const pushToTarget = (item, dojo, sub, lvl) => {
+                if (!item || typeof item !== 'object') return;
+                let targetLvl = parseInt(String(lvl || item.level || 1).replace(/\D/g, '')) || 1;
+
+                // 考題或選擇題格式
+                if (item.question || (Array.isArray(item.options) && item.options.length > 0)) {
+                    const qObj = {
+                        question: String(item.question || item.word || "").trim(),
+                        options: Array.isArray(item.options) ? item.options : [],
+                        answer: String(item.answer || "").trim(),
+                        explanation: String(item.explanation || item.chinese || item.rule || "").trim()
+                    };
+                    if (!qObj.question) return;
+                    const finalDojo = (dojo === 'grammar' || dojo === 'exam') ? dojo : 'exam';
+                    const finalSub = sub || (finalDojo === 'grammar' ? 'pos' : 'basic');
+                    targetLvl = Math.min(Math.max(targetLvl, 1), 30);
+
+                    if (finalDojo === 'exam' && mainDatabase.exam[finalSub]?.[targetLvl]) {
+                        if (isOverwrite || !mainDatabase.exam[finalSub][targetLvl].some(x => x.question === qObj.question)) {
+                            mainDatabase.exam[finalSub][targetLvl].push(qObj);
+                            addedCount++;
+                        }
+                    } else if (finalDojo === 'grammar' && mainDatabase.grammar[finalSub]?.[targetLvl]) {
+                        if (isOverwrite || !mainDatabase.grammar[finalSub][targetLvl].some(x => x.question === qObj.question)) {
+                            mainDatabase.grammar[finalSub][targetLvl].push(qObj);
+                            addedCount++;
+                        }
+                    }
+                    return;
+                }
+
+                // 單字 / 片語 / 字根字首 / 三態表轉換
+                const wordStr = String(item.word || item.base || item.infinitive || item.root || item.affix || "").trim();
+                if (!wordStr) return;
+
+                // 若文法三態表為單字屬性而非選擇題，也自動支援轉入或建立題目
+                if (dojo === 'grammar' && !item.question) {
+                    const qObj = {
+                        question: `${wordStr} (${item.chinese || item.meaning || '動詞變化'})`,
+                        options: Array.isArray(item.options) ? item.options : [
+                            item.past ? `過去式: ${item.past} / 過去分詞: ${item.pp || item.pastParticiple || ''}` : (item.example || wordStr),
+                            item.chinese || item.meaning || '詳見解析'
+                        ].filter(Boolean),
+                        answer: String(item.answer || "A").trim(),
+                        explanation: String(item.explanation || item.example || `${wordStr} - ${item.chinese || ''}`).trim()
+                    };
+                    const finalSub = sub || 'Irregular Verbs Table';
+                    targetLvl = Math.min(Math.max(targetLvl, 1), 30);
+                    if (mainDatabase.grammar[finalSub]?.[targetLvl]) {
+                        if (!mainDatabase.grammar[finalSub][targetLvl].some(x => x.question === qObj.question)) {
+                            mainDatabase.grammar[finalSub][targetLvl].push(qObj);
+                            addedCount++;
+                        }
+                    }
+                    return;
+                }
+
+                const cleanItem = {
+                    word: wordStr,
+                    chinese: String(item.chinese || item.translation || item.meaning || "").trim(),
+                    example: String(item.example || item.sentence || "").trim(),
+                    exampleCn: String(item.exampleCn || item.sentenceCn || item.example_cn || "").trim(),
+                    clozeQuestion: String(item.clozeQuestion || item.cloze || "").trim(),
+                    clozeCn: String(item.clozeCn || item.cloze_cn || "").trim(),
+                    clozeAnswer: String(item.clozeAnswer || wordStr).trim(),
+                    unit: parseInt(item.unit) || 1,
+                    prefix: item.prefix,
+                    base: item.base,
+                    suffix: item.suffix,
+                    rule: item.rule,
+                    phonetic: item.phonetic || item.kk || item.ipa || ""
+                };
+
+                const finalDojo = ['vocab', 'phrase', 'affix'].includes(dojo) ? dojo : 'vocab';
+                targetLvl = Math.min(Math.max(targetLvl, 1), 10);
+
+                if (finalDojo === 'vocab') {
+                    const finalSub = VOCAB_DIFFS_DATA.some(d => d.id === sub) ? sub : 'basic';
+                    if (mainDatabase.vocab[finalSub]?.[targetLvl]) {
+                        if (isOverwrite || !mainDatabase.vocab[finalSub][targetLvl].some(x => x.word === cleanItem.word)) {
+                            mainDatabase.vocab[finalSub][targetLvl].push(cleanItem);
+                            addedCount++;
+                        }
+                    }
+                } else if (finalDojo === 'phrase') {
+                    if (mainDatabase.phrase[targetLvl]) {
+                        if (isOverwrite || !mainDatabase.phrase[targetLvl].some(x => x.word === cleanItem.word)) {
+                            mainDatabase.phrase[targetLvl].push(cleanItem);
+                            addedCount++;
+                        }
+                    }
+                } else if (finalDojo === 'affix') {
+                    if (mainDatabase.affix[targetLvl]) {
+                        if (isOverwrite || !mainDatabase.affix[targetLvl].some(x => x.word === cleanItem.word)) {
+                            mainDatabase.affix[targetLvl].push(cleanItem);
+                            addedCount++;
+                        }
+                    }
+                }
+            };
+
+            const parseNode = (node, dojo, sub, defaultLvl = 1) => {
+                if (!node) return;
+                if (Array.isArray(node)) {
+                    // 若是純陣列且項目沒指定 level，每 20 題自動分配關卡，或依項目內建的 level 分配
+                    node.forEach((item, idx) => {
+                        const autoLvl = item.level ? item.level : (defaultLvl || (Math.floor(idx / 25) + 1));
+                        pushToTarget(item, dojo, sub, autoLvl);
+                    });
+                } else if (typeof node === 'object') {
+                    // 檢查是否本身就是單一題目物件
+                    if (node.word || node.question) {
+                        pushToTarget(node, dojo, sub, node.level || defaultLvl);
+                        return;
+                    }
+                    Object.keys(node).forEach(key => {
+                        const val = node[key];
+                        const cleanKey = key.trim();
+                        const lvlMatch = cleanKey.match(/^(?:level\s*|lvl\s*|l)?(\d+)$/i);
+                        if (lvlMatch) {
+                            parseNode(val, dojo, sub, parseInt(lvlMatch[1]));
+                        } else if (['basic', 'intermediate', 'advanced'].includes(cleanKey)) {
+                            parseNode(val, dojo || 'vocab', cleanKey, defaultLvl);
+                        } else if (GRAMMAR_UNITS_DATA.some(u => u.id === cleanKey || u.name === cleanKey)) {
+                            const matchedUnit = GRAMMAR_UNITS_DATA.find(u => u.id === cleanKey || u.name === cleanKey);
+                            parseNode(val, 'grammar', matchedUnit.id, defaultLvl);
+                        } else if (['questions', 'data', 'items', 'list', 'words', 'levels'].includes(cleanKey.toLowerCase())) {
+                            parseNode(val, dojo, sub, defaultLvl);
+                        } else {
+                            parseNode(val, dojo, sub, defaultLvl);
+                        }
+                    });
+                }
+            };
+
+            // 情況 A：JSON 頂層帶有標準分類鍵 (vocab, exam, grammar, phrase, affix)
+            let hasStandardTopKey = false;
+            ['vocab', 'exam', 'grammar', 'phrase', 'affix'].forEach(topKey => {
+                if (rawData[topKey]) {
+                    hasStandardTopKey = true;
+                    const urlHint = detectCategoryFromUrl(sourceUrl);
+                    parseNode(rawData[topKey], topKey, urlHint?.sub || null, 1);
+                }
+            });
+
+            // 情況 B：JSON 沒有標準頂層包裝，由網址檔名或內容結構智慧判斷
+            if (!hasStandardTopKey) {
+                const hint = detectCategoryFromUrl(sourceUrl);
+                if (hint) {
+                    parseNode(rawData, hint.dojo, hint.sub, 1);
+                } else {
+                    // 若連網址都看不出來，檢查第一筆內容是考題還是單字
+                    const sampleStr = JSON.stringify(rawData).slice(0, 600);
+                    if (sampleStr.includes('"question"') || sampleStr.includes('"options"')) {
+                        parseNode(rawData, 'exam', 'basic', 1);
+                    } else {
+                        parseNode(rawData, 'vocab', 'basic', 1);
+                    }
+                }
+            }
+
+            return addedCount;
         }
 
         function createEmptyDB() {
@@ -727,13 +967,7 @@
             if (savedState) {
                 try { 
                     userState = { ...userState, ...JSON.parse(savedState) }; 
-                    // 確保預設的 18 個 GitHub 檔案都在同步清單中，且強制開啟自動同步
-                    let currentUrls = (userState.autoSyncUrl || "").split('\n').map(normalizeGithubRawUrl).filter(Boolean);
-                    DEFAULT_SYNC_URLS_ARRAY.forEach(defUrl => {
-                        const normDef = normalizeGithubRawUrl(defUrl);
-                        if (!currentUrls.includes(normDef)) currentUrls.push(normDef);
-                    });
-                    userState.autoSyncUrl = currentUrls.join('\n');
+                    userState.autoSyncUrl = DEFAULT_SYNC_URLS;
                     userState.autoSyncOnLoad = true;
                 } catch(e) {
                     userState.autoSyncUrl = DEFAULT_SYNC_URLS;
@@ -975,7 +1209,7 @@
             if (userState.currentTab === 'review') { renderReviewTab(); return; }
             if (dataList.length === 0) {
                 const theme = getThemeColors(); const unitText = ['affix', 'exam', 'grammar'].includes(userState.currentDojo) ? '' : ` - Unit ${userState.currentUnit}`;
-                contentDiv.innerHTML = `<div class="flex flex-col items-center justify-center py-12 text-slate-400"><div class="p-4 ${theme.bgLight} rounded-full border ${theme.border} mb-4 animate-bounce"><i class="fa-solid fa-folder-open text-5xl ${theme.text}"></i></div><p class="font-extrabold text-slate-200 text-center text-base sm:text-lg">修煉境界 L${userState.currentLevel}${unitText} 目前沒有資料！</p><p class="text-xs text-slate-500 mt-2 max-w-sm text-center leading-relaxed">系統正在從 GitHub 雲端大陣同步題庫，或此單元尚無題目。您也可點擊下方「📥 匯入管理」自訂新增！</p><button onclick="switchTab('admin')" class="mt-6 px-6 py-2.5 bg-gradient-to-r ${theme.gradient} hover:opacity-90 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg ${theme.shadow} flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> 立即解鎖管理後台</button></div>`;
+                contentDiv.innerHTML = `<div class="flex flex-col items-center justify-center py-12 text-slate-400"><div class="p-4 ${theme.bgLight} rounded-full border ${theme.border} mb-4 animate-bounce"><i class="fa-solid fa-folder-open text-5xl ${theme.text}"></i></div><p class="font-extrabold text-slate-200 text-center text-base sm:text-lg">修煉境界 L${userState.currentLevel}${unitText} 目前沒有資料！</p><p class="text-xs text-slate-500 mt-2 max-w-sm text-center leading-relaxed">可點擊下方按鈕立即重新從 GitHub 雲端大陣拉取全部題庫，或切換至其他有題目的境界關卡！</p><div class="flex flex-wrap gap-3 mt-6 justify-center"><button onclick="autoSyncAllGithubFiles(true)" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition-all shadow-lg flex items-center gap-2"><i class="fa-solid fa-rotate"></i> 立即重新拉取 GitHub 題庫</button><button onclick="switchTab('admin')" class="px-6 py-2.5 bg-gradient-to-r ${theme.gradient} hover:opacity-90 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg ${theme.shadow} flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> 解鎖管理後台</button></div></div>`;
                 return;
             }
             if (userState.flashcardIndex >= dataList.length) userState.flashcardIndex = 0; if (userState.quizIndex >= dataList.length) userState.quizIndex = 0;
@@ -1039,7 +1273,7 @@
                 const letters = ['A', 'B', 'C', 'D']; let optionsHTML = '';
                 if(item.options && Array.isArray(item.options)) {
                     item.options.forEach((opt, oIdx) => {
-                        const isAns = letters[oIdx] === item.answer;
+                        const isAns = letters[oIdx] === item.answer || opt === item.answer;
                         const ansTheme = isAns ? `bg-${colorPrefix}-500/20 text-${colorPrefix}-300 border border-${colorPrefix}-500/30` : 'bg-slate-950 text-slate-400 border border-slate-800';
                         optionsHTML += `<div class="px-3 py-2 rounded-lg text-sm font-bold ${ansTheme}">(${letters[oIdx]}) ${opt}</div>`;
                     });
@@ -1056,9 +1290,17 @@
             const titleStr = userState.currentDojo === 'grammar' ? '文法特訓' : '實戰試煉'; const iconClass = userState.currentDojo === 'grammar' ? 'fa-pen-ruler' : 'fa-graduation-cap';
             const letters = ['A', 'B', 'C', 'D']; let optionsHTML = '';
 
+            // 自動正規化答案字母（支援答案填 'A' 或直接填選項文字）
+            let normalizedAnswerLetter = String(currentItem.answer || 'A').trim().toUpperCase();
+            if (!['A', 'B', 'C', 'D'].includes(normalizedAnswerLetter) && Array.isArray(currentItem.options)) {
+                const foundIdx = currentItem.options.findIndex(o => String(o).trim() === String(currentItem.answer).trim());
+                if (foundIdx !== -1) normalizedAnswerLetter = letters[foundIdx];
+            }
+
             if(currentItem.options && Array.isArray(currentItem.options)) {
                 currentItem.options.forEach((opt, oIdx) => {
-                    optionsHTML += `<button onclick="checkExamAnswer('${letters[oIdx]}', '${currentItem.answer}', this, ${userState.quizIndex}, ${data.length})" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-${colorPrefix}-500/50 text-left font-bold text-sm sm:text-base transition-all duration-200 flex items-center gap-3 group active:scale-98 exam-option-btn text-slate-300"><span class="w-7 h-7 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-xs text-slate-400 group-hover:${theme.textHover.replace('hover:', '')} shrink-0 font-mono transition-colors">${letters[oIdx]}</span><span>${opt}</span></button>`;
+                    const cleanOpt = String(opt).replace(/^\([A-D]\)\s*/i, '');
+                    optionsHTML += `<button onclick="checkExamAnswer('${letters[oIdx]}', '${normalizedAnswerLetter}', this, ${userState.quizIndex}, ${data.length})" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-${colorPrefix}-500/50 text-left font-bold text-sm sm:text-base transition-all duration-200 flex items-center gap-3 group active:scale-98 exam-option-btn text-slate-300"><span class="w-7 h-7 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-xs text-slate-400 group-hover:${theme.textHover.replace('hover:', '')} shrink-0 font-mono transition-colors">${letters[oIdx]}</span><span>${cleanOpt}</span></button>`;
                 });
             }
 
@@ -1475,52 +1717,10 @@
         function insertTemplateText() {
             playSound('click'); document.getElementById('bulk-import-area').value = `achieve /əˈtʃiːv/ 達到、實現\nEg1: We can achieve our goals if we work hard.\n如果我們努力，就能實現目標。\nCloze: Judy study hard in order to a______e her dream of being a lawyer.\nClozeCn: 茱蒂努力讀書是為了要實現成為律師的夢想。`;
         }
-        function fillModalSampleUrl() { playSound('click'); const t = document.getElementById('modal-sync-url-input'); if (t) { t.value = DEFAULT_SYNC_URLS; showToast("已還原預設全部 18 個 GitHub 題庫網址！", "info"); } }
+        function fillModalSampleUrl() { playSound('click'); const t = document.getElementById('modal-sync-url-input'); if (t) { t.value = DEFAULT_SYNC_URLS; showToast("已還原預設全部 GitHub 題庫網址！", "info"); } }
         function saveAdminSyncToGlobal() {
             const url = document.getElementById('github-url-input')?.value.trim(); if (!url) return;
             userState.autoSyncUrl = url; userState.autoSyncOnLoad = true; saveProgress(); updateSyncBadgeUI(); showToast("💾 已將此雲端網址設定為首頁自動同步連結！", "success");
-        }
-
-        function normalizeImportedJson(data) {
-            let normalized = createEmptyDB();
-            if (!data || typeof data !== 'object') return null;
-
-            const processList = (list, type, diffOrUnit, lvl) => {
-                list.forEach(item => {
-                    if ((type === 'exam' || type === 'grammar') && item.question) {
-                        const targetObj = { question: String(item.question || "").trim(), options: Array.isArray(item.options) ? item.options : [], answer: String(item.answer || "").trim(), explanation: String(item.explanation || "").trim() };
-                        if (type === 'exam' && normalized.exam[diffOrUnit]?.[lvl]) normalized.exam[diffOrUnit][lvl].push(targetObj);
-                        if (type === 'grammar' && normalized.grammar[diffOrUnit]?.[lvl]) normalized.grammar[diffOrUnit][lvl].push(targetObj);
-                    } else if (item && item.word) {
-                        const cleanItem = { word: String(item.word || "").trim(), chinese: String(item.chinese || item.translation || "").trim(), example: String(item.example || item.sentence || "").trim(), exampleCn: String(item.exampleCn || item.sentenceCn || "").trim(), clozeQuestion: String(item.clozeQuestion || "").trim(), clozeCn: String(item.clozeCn || "").trim(), clozeAnswer: String(item.clozeAnswer || item.word || "").trim(), unit: parseInt(item.unit) || 1, prefix: item.prefix, base: item.base, suffix: item.suffix, rule: item.rule, phonetic: item.phonetic };
-                        if(type === 'vocab' && normalized.vocab[diffOrUnit]?.[lvl]) normalized.vocab[diffOrUnit][lvl].push(cleanItem);
-                        else if (type === 'phrase' && normalized.phrase[lvl]) normalized.phrase[lvl].push(cleanItem);
-                        else if (type === 'affix' && normalized.affix[lvl]) normalized.affix[lvl].push(cleanItem);
-                    }
-                });
-            };
-
-            if (data.vocab) VOCAB_DIFFS_DATA.forEach(d => { if (data.vocab[d.id]) for (let lvl=1; lvl<=10; lvl++) if (Array.isArray(data.vocab[d.id][lvl])) processList(data.vocab[d.id][lvl], 'vocab', d.id, lvl); });
-            if (data.exam) VOCAB_DIFFS_DATA.forEach(d => { if (data.exam[d.id]) for (let lvl=1; lvl<=30; lvl++) if (Array.isArray(data.exam[d.id][lvl])) processList(data.exam[d.id][lvl], 'exam', d.id, lvl); });
-            if (data.grammar) GRAMMAR_UNITS_DATA.forEach(u => { if (data.grammar[u.id]) for (let lvl=1; lvl<=30; lvl++) if (Array.isArray(data.grammar[u.id][lvl])) processList(data.grammar[u.id][lvl], 'grammar', u.id, lvl); });
-            if (data.phrase) for (let lvl=1; lvl<=10; lvl++) if (Array.isArray(data.phrase[lvl])) processList(data.phrase[lvl], 'phrase', null, lvl);
-            if (data.affix) for (let lvl=1; lvl<=10; lvl++) if (Array.isArray(data.affix[lvl])) processList(data.affix[lvl], 'affix', null, lvl);
-            return normalized;
-        }
-
-        function mergeNormalizedDataIntoMain(data, isOverwrite) {
-            if (!data) return;
-            VOCAB_DIFFS_DATA.forEach(d => {
-                for(let l=1; l<=10; l++) data.vocab[d.id][l].forEach(item => { if(isOverwrite || !mainDatabase.vocab[d.id][l].some(x => x.word === item.word)) mainDatabase.vocab[d.id][l].push(item); });
-                for(let l=1; l<=30; l++) data.exam[d.id][l].forEach(item => { if(isOverwrite || !mainDatabase.exam[d.id][l].some(x => x.question === item.question)) mainDatabase.exam[d.id][l].push(item); });
-            });
-            for(let l=1; l<=10; l++) {
-                data.phrase[l].forEach(item => { if(isOverwrite || !mainDatabase.phrase[l].some(x => x.word === item.word)) mainDatabase.phrase[l].push(item); });
-                data.affix[l].forEach(item => { if(isOverwrite || !mainDatabase.affix[l].some(x => x.word === item.word)) mainDatabase.affix[l].push(item); });
-            }
-            GRAMMAR_UNITS_DATA.forEach(u => {
-                for(let l=1; l<=30; l++) data.grammar[u.id][l].forEach(item => { if(isOverwrite || !mainDatabase.grammar[u.id][l].some(x => x.question === item.question)) mainDatabase.grammar[u.id][l].push(item); });
-            });
         }
 
         async function fetchGitHubJson() {
@@ -1530,62 +1730,111 @@
             const importMode = document.querySelector('input[name="github-import-mode"]:checked').value; 
             if (importMode === 'overwrite') mainDatabase = createEmptyDB();
             
-            let urls = urlInput.value.split('\n').map(normalizeGithubRawUrl).filter(Boolean);
-            let successCount = 0;
+            let urls = urlInput.value.split('\n').map(u => u.trim()).filter(Boolean);
+            let successFiles = 0;
 
-            const results = await Promise.allSettled(urls.map(url => fetch(url).then(r => r.ok ? r.json() : Promise.reject())));
-            results.forEach(res => {
-                if (res.status === 'fulfilled' && res.value) {
-                    const data = normalizeImportedJson(res.value);
-                    if (data) { mergeNormalizedDataIntoMain(data, false); successCount++; }
+            await Promise.allSettled(urls.map(async (rawUrl) => {
+                const jsonData = await fetchJsonWithFallback(rawUrl);
+                if (jsonData) {
+                    smartParseAndMerge(jsonData, rawUrl, false);
+                    successFiles++;
                 }
-            });
+            }));
 
-            if (successCount > 0) {
-                playSound('levelUp'); showToast(`成功提取 ${successCount} 個雲端法陣！`, "success");
-                setTimeout(() => { userState.currentTab = 'list'; saveProgress(); updateTabButtonsUI(); renderContent(); }, 1000);
-            } else { playSound('wrong'); showToast("下載失敗，請檢查網址", "error"); }
+            if (successFiles > 0) {
+                playSound('levelUp'); showToast(`成功提取 ${successFiles} 個雲端法陣！`, "success");
+                saveProgress(); renderAdminTab();
+            } else { playSound('wrong'); showToast("下載失敗，請檢查網址或網路連線", "error"); }
             fetchBtn.disabled = false; fetchBtn.innerHTML = origBtnHtml;
         }
 
-        // 併發自動讀取所有 GitHub 檔案，無須手動切換
-        async function backgroundSync(rawUrlStr, mode) {
-            if (!rawUrlStr) return;
+        // 自動透過 GitHub API 掃描 less1324-blip/yichentesting 所有 .json 檔案並與預設清單合併抓取
+        async function autoSyncAllGithubFiles(showManualToast = false) {
             const syncIcon = document.getElementById('header-sync-icon'), syncStatus = document.getElementById('header-sync-status');
             if (syncIcon && syncStatus) {
                 syncIcon.className = "fa-solid fa-arrows-rotate animate-spin text-blue-400";
                 syncStatus.textContent = "雲端同步中...";
-                syncStatus.className = "text-[11px] font-bold text-blue-400";
+                syncStatus.className = "text-xs font-bold text-blue-400";
             }
 
-            let urls = rawUrlStr.split('\n').map(normalizeGithubRawUrl).filter(Boolean);
-            let syncedCount = 0;
+            let targetUrls = new Set(DEFAULT_SYNC_URLS_ARRAY);
+            if (userState.autoSyncUrl) {
+                userState.autoSyncUrl.split('\n').map(u => u.trim()).filter(Boolean).forEach(u => targetUrls.add(u));
+            }
 
-            if (mode === 'overwrite') mainDatabase = createEmptyDB();
-
-            const results = await Promise.allSettled(urls.map(url => fetch(url).then(r => r.ok ? r.json() : Promise.reject())));
-            results.forEach(res => {
-                if (res.status === 'fulfilled' && res.value) {
-                    const data = normalizeImportedJson(res.value);
-                    if (data) {
-                        mergeNormalizedDataIntoMain(data, false);
-                        syncedCount++;
+            // 自動探測 GitHub Repo 內所有 .json 檔案
+            try {
+                const repoRes = await fetch('https://api.github.com/repos/less1324-blip/yichentesting/contents/', { cache: 'no-store' });
+                if (repoRes.ok) {
+                    const files = await repoRes.json();
+                    if (Array.isArray(files)) {
+                        files.forEach(f => {
+                            if (f.name && f.name.toLowerCase().endsWith('.json') && f.download_url) {
+                                targetUrls.add(f.download_url);
+                            }
+                        });
                     }
                 }
+            } catch (e) {}
+
+            // 依檔名去重，避免同一個檔案重複請求
+            const uniqueFileMap = new Map();
+            Array.from(targetUrls).forEach(u => {
+                let decodedName = u;
+                try { decodedName = decodeURIComponent(u.split('/').pop().replace(/\?raw=true$/i, '')).toLowerCase(); } catch (e) {}
+                if (!uniqueFileMap.has(decodedName)) uniqueFileMap.set(decodedName, u);
             });
 
-            if (syncedCount > 0) {
-                saveProgress();
-                renderContent();
-                showToast(`☁️ 已自動載入 ${syncedCount} 個 GitHub 雲端題庫！`, "success");
+            const finalUrls = Array.from(uniqueFileMap.values());
+            let loadedFilesCount = 0;
+            let totalAddedItems = 0;
+
+            if (userState.autoSyncMode === 'overwrite') mainDatabase = createEmptyDB();
+
+            await Promise.allSettled(finalUrls.map(async (rawUrl) => {
+                const jsonData = await fetchJsonWithFallback(rawUrl);
+                if (jsonData) {
+                    const added = smartParseAndMerge(jsonData, rawUrl, false);
+                    loadedFilesCount++;
+                    totalAddedItems += added;
+                }
+            }));
+
+            // 若當前選中的關卡剛好沒資料，自動切換到第一個有資料的關卡方便直接預覽
+            if (getActiveDataList().length === 0) {
+                for (let l = 1; l <= 10; l++) {
+                    if ((mainDatabase.vocab[userState.currentDifficulty]?.[l] || []).length > 0) {
+                        userState.currentLevel = l;
+                        userState.currentUnit = mainDatabase.vocab[userState.currentDifficulty][l][0].unit || 1;
+                        break;
+                    }
+                }
             }
-            updateSyncBadgeUI();
+
+            saveProgress();
+            renderDifficultySelector();
+            renderLevelSelector();
+            renderUnitSelector();
+            renderContent();
+
+            if (loadedFilesCount > 0) {
+                if (syncIcon && syncStatus) {
+                    syncIcon.className = "fa-solid fa-cloud-arrow-down text-emerald-400";
+                    syncStatus.textContent = `已載入 ${loadedFilesCount} 題庫`;
+                    syncStatus.className = "text-xs font-bold text-emerald-400";
+                }
+                if (showManualToast || totalAddedItems > 0) {
+                    showToast(`☁️ 已自動同步 ${loadedFilesCount} 個 GitHub 題庫檔！`, "success");
+                }
+            } else {
+                updateSyncBadgeUI();
+            }
         }
 
         function openSyncSettingsModal() {
             playSound('click'); const modal = document.getElementById('sync-settings-modal');
             const urlInput = document.getElementById('modal-sync-url-input'); const modeSelect = document.getElementById('modal-sync-mode'); const onloadSelect = document.getElementById('modal-sync-onload');
-            if (urlInput) urlInput.value = userState.autoSyncUrl || "";
+            if (urlInput) urlInput.value = userState.autoSyncUrl || DEFAULT_SYNC_URLS;
             if (modeSelect) modeSelect.value = userState.autoSyncMode || "merge";
             if (onloadSelect) onloadSelect.value = String(userState.autoSyncOnLoad);
             modal.classList.remove('pointer-events-none', 'opacity-0'); modal.firstElementChild.classList.remove('scale-95');
@@ -1598,17 +1847,17 @@
             if (!syncIcon || !syncStatus || !syncBadge) return;
             syncBadge.className = "flex items-center gap-2 px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded-xl cursor-pointer transition-all active:scale-95 text-slate-400 hover:text-blue-400 group";
             if (userState.autoSyncUrl && userState.autoSyncUrl.trim() !== "") {
-                syncIcon.className = "fa-solid fa-cloud-arrow-down text-blue-400"; syncStatus.textContent = "雲端已同步"; syncStatus.className = "text-[11px] font-bold text-blue-400";
-            } else { syncIcon.className = "fa-solid fa-cloud text-slate-500"; syncStatus.textContent = "手動修行"; syncStatus.className = "text-[11px] font-bold text-slate-400"; }
+                syncIcon.className = "fa-solid fa-cloud-arrow-down text-blue-400"; syncStatus.textContent = "雲端已連線"; syncStatus.className = "text-xs font-bold text-blue-400";
+            } else { syncIcon.className = "fa-solid fa-cloud text-slate-500"; syncStatus.textContent = "手動修行"; syncStatus.className = "text-xs font-bold text-slate-400"; }
         }
 
         function saveAndTriggerSync() {
             playSound('click'); const urlInput = document.getElementById('modal-sync-url-input');
             const modeSelect = document.getElementById('modal-sync-mode'); const onloadSelect = document.getElementById('modal-sync-onload');
             if (!urlInput) return; const url = urlInput.value.trim();
-            userState.autoSyncUrl = url; userState.autoSyncMode = modeSelect ? modeSelect.value : "merge"; userState.autoSyncOnLoad = onloadSelect ? (onloadSelect.value === "true") : true;
-            saveProgress(); updateSyncBadgeUI(); closeSyncSettingsModal();
-            if (url !== "") backgroundSync(url, userState.autoSyncMode); else showToast("已清除並儲存同步法陣設定！", "info");
+            userState.autoSyncUrl = url || DEFAULT_SYNC_URLS; userState.autoSyncMode = modeSelect ? modeSelect.value : "merge"; userState.autoSyncOnLoad = onloadSelect ? (onloadSelect.value === "true") : true;
+            saveProgress(); closeSyncSettingsModal();
+            autoSyncAllGithubFiles(true);
         }
 
         function processBulkImport() {
@@ -1726,8 +1975,8 @@
             loadProgress(); const urlSync = new URLSearchParams(window.location.search).get('sync');
             if (urlSync) { userState.autoSyncUrl = urlSync.trim(); userState.autoSyncOnLoad = true; saveProgress(); window.history.pushState({}, '', window.location.pathname); }
             updateDojoTabUI(); renderDifficultySelector(); renderLevelSelector(); renderUnitSelector(); renderContent(); updateHeaderUI(); updateTabButtonsUI(); updateSyncBadgeUI(); updateVoicePanelUI();
-            // 網頁載入時無條件自動同步所有 GitHub 題庫檔案
-            backgroundSync(userState.autoSyncUrl || DEFAULT_SYNC_URLS, userState.autoSyncMode || "merge");
+            // 啟動全自動 GitHub 掃描與雙線備援載入
+            autoSyncAllGithubFiles(false);
             setTimeout(() => { openWelcomeGuide(); }, 600);
         };
     </script>
