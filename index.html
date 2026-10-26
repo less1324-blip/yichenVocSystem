@@ -58,7 +58,7 @@
 </head>
 <body class="text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-500/30 selection:text-blue-200">
 
-    <header class="glass-panel border-b border-slate-850 sticky top-0 z-40 py-3.5 px-4 sm:px-6 shadow-xl">
+    <header class="glass-panel border-b border-slate-800 sticky top-0 z-40 py-3.5 px-4 sm:px-6 shadow-xl">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div onclick="goHome()" class="flex items-center gap-3 cursor-pointer group select-none hover:opacity-95 active:scale-98 transition-all">
                 <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-blue-600 p-2.5 rounded-2xl shadow-lg shadow-blue-500/20 group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
@@ -71,12 +71,12 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2 sm:gap-3 bg-slate-950/70 p-2 rounded-2xl border border-slate-800/80 justify-between md:justify-start">
-                <button onclick="openStatsModal()" class="flex items-center gap-2 px-3 py-1.5 bg-slate-900/90 border border-slate-800 hover:border-orange-500/30 rounded-xl transition-all hover:bg-slate-850 active:scale-95 group">
+                <button onclick="openStatsModal()" class="flex items-center gap-2 px-3 py-1.5 bg-slate-900/90 border border-slate-800 hover:border-orange-500/30 rounded-xl transition-all hover:bg-slate-800 active:scale-95 group">
                     <span class="text-sm font-black text-orange-400 group-hover:scale-105 transition-transform"><i class="fa-solid fa-chart-line mr-1"></i> 修行法海</span>
                 </button>
-                <div onclick="openSyncSettingsModal()" id="header-sync-badge" class="flex items-center gap-2 px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-850 hover:border-blue-500/50 rounded-xl cursor-pointer transition-all active:scale-95 text-slate-400 hover:text-blue-400 group" title="雲端同步法陣設定">
+                <div onclick="openSyncSettingsModal()" id="header-sync-badge" class="flex items-center gap-2 px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded-xl cursor-pointer transition-all active:scale-95 text-slate-400 hover:text-blue-400 group" title="雲端同步法陣設定">
                     <i id="header-sync-icon" class="fa-solid fa-cloud animate-pulse text-base"></i>
-                    <span id="header-sync-status" class="text-xs font-bold">手動修行</span>
+                    <span id="header-sync-status" class="text-xs font-bold">自動同步中</span>
                 </div>
                 <div class="h-6 w-[1px] bg-slate-800 hidden md:block"></div>
                 <div class="flex items-center gap-2 px-1 sm:px-2">
@@ -89,7 +89,7 @@
                 <div class="h-6 w-[1px] bg-slate-800"></div>
                 <div class="flex-1 md:w-32 lg:w-40 px-2 min-w-[100px]">
                     <div class="flex justify-between text-[10px] mb-1">
-                        <span class="text-slate-450 font-bold">修為 (EXP)</span>
+                        <span class="text-slate-400 font-bold">修為 (EXP)</span>
                         <span id="exp-ratio-color" class="text-orange-400 font-extrabold"><span id="exp-ratio">0 / 100</span></span>
                     </div>
                     <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800/60">
@@ -108,7 +108,6 @@
     <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 flex flex-col gap-5 relative z-10">
         <!-- 練功房選擇區 -->
         <section id="dojo-selector-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 transition-all duration-300">
-            <!-- 透過 JS 動態更新 class -->
             <button id="dojo-btn-vocab" onclick="switchDojo('vocab')"></button>
             <button id="dojo-btn-phrase" onclick="switchDojo('phrase')"></button>
             <button id="dojo-btn-affix" onclick="switchDojo('affix')"></button>
@@ -137,7 +136,7 @@
         <section id="unit-selector-section" class="glass-panel rounded-3xl p-3 shadow-md relative overflow-hidden transition-all duration-300 bg-slate-900/60 border border-slate-800/80">
             <div class="relative z-10 flex flex-col items-center gap-2.5">
                 <div class="flex items-center gap-2 text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-widest">
-                    <i class="fa-solid fa-bookmark text-emerald-450"></i>
+                    <i class="fa-solid fa-bookmark text-emerald-400"></i>
                     <span>選擇修煉小章節 (UNITS)</span>
                 </div>
                 <div class="flex flex-wrap justify-center gap-1.5 w-full max-w-4xl" id="unit-tabs-container"></div>
@@ -159,7 +158,7 @@
         </section>
     </main>
 
-    <!-- Welcome/Guides/Modals 結構保持精簡且功能一致 -->
+    <!-- Welcome Guide Modal (修煉閣新手指南) -->
     <div id="welcome-guide-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
         <div class="glass-panel border border-orange-500/40 max-w-2xl w-full mx-4 rounded-3xl p-1 shadow-2xl scale-95 transition-transform duration-300 relative overflow-hidden flex flex-col max-h-[85vh]">
             <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -203,8 +202,9 @@
                     </div>
                 </div>
             </div>
-            <div class="p-4 sm:p-5 border-t border-slate-800/80 bg-slate-900/40 rounded-b-3xl flex flex-col items-center gap-3.5">
+            <div class="p-4 sm:p-5 border-t border-slate-800/80 bg-slate-900/40 rounded-b-3xl flex flex-col items-center gap-3">
                 <button onclick="closeWelcomeGuide()" class="px-8 py-3 bg-gradient-to-r from-orange-500 to-amber-600 hover:opacity-90 text-slate-950 font-black text-sm rounded-xl shadow-lg shadow-orange-500/20 transition-all flex items-center gap-2">我已了解，開始修煉！</button>
+                <div class="text-[11px] sm:text-xs text-slate-400 font-bold tracking-widest text-center mt-0.5">著作權所有人-懿城文教機構-林哲宇</div>
             </div>
         </div>
     </div>
@@ -246,15 +246,18 @@
                 </div>
             </div>
 
-            <div class="p-4 sm:p-5 border-t border-slate-800/80 bg-slate-900/40 rounded-b-3xl flex items-center justify-between">
-                <button id="affix-btn-prev" onclick="prevAffixSlide()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold rounded-xl transition-all invisible"><i class="fa-solid fa-arrow-left mr-1"></i> 上一頁</button>
-                <div class="flex gap-2.5">
-                    <div id="affix-dot-1" class="w-6 h-2 rounded-full bg-emerald-400 transition-all shadow-glow"></div>
-                    <div id="affix-dot-2" class="w-2 h-2 rounded-full bg-slate-700 transition-all"></div>
-                    <div id="affix-dot-3" class="w-2 h-2 rounded-full bg-slate-700 transition-all"></div>
+            <div class="p-4 sm:p-5 border-t border-slate-800/80 bg-slate-900/40 rounded-b-3xl flex flex-col gap-3">
+                <div class="flex items-center justify-between w-full">
+                    <button id="affix-btn-prev" onclick="prevAffixSlide()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold rounded-xl transition-all invisible"><i class="fa-solid fa-arrow-left mr-1"></i> 上一頁</button>
+                    <div class="flex gap-2.5">
+                        <div id="affix-dot-1" class="w-6 h-2 rounded-full bg-emerald-400 transition-all shadow-glow"></div>
+                        <div id="affix-dot-2" class="w-2 h-2 rounded-full bg-slate-700 transition-all"></div>
+                        <div id="affix-dot-3" class="w-2 h-2 rounded-full bg-slate-700 transition-all"></div>
+                    </div>
+                    <button id="affix-btn-next" onclick="nextAffixSlide()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 text-xs sm:text-sm font-bold rounded-xl transition-all border border-emerald-500/30">下一頁 <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    <button id="affix-btn-start" onclick="closeAffixGuide()" class="hidden px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-emerald-500/20 transition-all"><i class="fa-solid fa-bolt mr-1"></i> 開始解碼</button>
                 </div>
-                <button id="affix-btn-next" onclick="nextAffixSlide()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 text-xs sm:text-sm font-bold rounded-xl transition-all border border-emerald-500/30">下一頁 <i class="fa-solid fa-arrow-right ml-1"></i></button>
-                <button id="affix-btn-start" onclick="closeAffixGuide()" class="hidden px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-emerald-500/20 transition-all"><i class="fa-solid fa-bolt mr-1"></i> 開始解碼</button>
+                <div class="text-[11px] sm:text-xs text-slate-400 font-bold tracking-widest text-center">著作權所有人-懿城文教機構-林哲宇</div>
             </div>
         </div>
     </div>
@@ -278,11 +281,11 @@
     <div id="toast-container" class="fixed bottom-24 right-6 z-[60] flex flex-col gap-3 pointer-events-none"></div>
 
     <div class="fixed bottom-6 right-6 z-50 flex flex-col-reverse items-end gap-3 pointer-events-auto">
-        <button onclick="toggleVoicePanel()" class="w-14 h-14 bg-slate-900 border border-slate-750 hover:border-orange-550 rounded-full shadow-2xl flex items-center justify-center text-orange-450 hover:text-orange-400 transition-all hover:scale-105 group relative" title="語音引擎設定">
+        <button onclick="toggleVoicePanel()" class="w-14 h-14 bg-slate-900 border border-slate-700 hover:border-orange-500 rounded-full shadow-2xl flex items-center justify-center text-orange-400 hover:text-orange-300 transition-all hover:scale-105 group relative" title="語音引擎設定">
             <div class="absolute inset-0 bg-orange-500/10 rounded-full blur group-hover:bg-orange-500/20 transition-all"></div>
             <i class="fa-solid fa-headphones text-xl relative z-10"></i>
         </button>
-        <div id="voice-settings-panel" class="hidden glass-panel border border-slate-750 p-4 rounded-2xl shadow-2xl w-64 origin-bottom-right transition-all">
+        <div id="voice-settings-panel" class="hidden glass-panel border border-slate-700 p-4 rounded-2xl shadow-2xl w-64 origin-bottom-right transition-all">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2 mb-3">
                 <h4 class="text-sm font-black text-slate-200"><i class="fa-solid fa-volume-high mr-2 text-orange-400"></i>語音發音設定</h4>
                 <button onclick="toggleVoicePanel()" class="text-slate-500 hover:text-slate-300"><i class="fa-solid fa-xmark"></i></button>
@@ -290,7 +293,7 @@
             <div class="flex flex-col gap-4">
                 <div>
                     <label class="block text-[10px] text-slate-400 font-bold mb-2 uppercase tracking-wider">發音腔調 (Accent)</label>
-                    <div class="flex gap-2 bg-slate-950/60 p-1 rounded-xl border border-slate-850">
+                    <div class="flex gap-2 bg-slate-950/60 p-1 rounded-xl border border-slate-800">
                         <button id="accent-btn-US" onclick="setAccent('US')" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all">🇺🇸 美式</button>
                         <button id="accent-btn-UK" onclick="setAccent('UK')" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all">🇬🇧 英式</button>
                     </div>
@@ -313,10 +316,10 @@
                 <i class="fa-solid fa-triangle-exclamation text-3xl shrink-0"></i>
                 <h3 class="text-lg font-black" id="confirm-modal-title">確認執行此法陣操作？</h3>
             </div>
-            <p class="text-sm text-slate-350 leading-relaxed" id="confirm-modal-desc">清空操作將會抹除現有修行記錄，且無法再次召回。</p>
+            <p class="text-sm text-slate-300 leading-relaxed" id="confirm-modal-desc">清空操作將會抹除現有修行記錄，且無法再次召回。</p>
             <div class="flex gap-3 justify-end mt-2">
                 <button id="confirm-modal-cancel" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-slate-400 font-bold text-xs rounded-xl border border-slate-800 transition-colors">取消修行</button>
-                <button id="confirm-modal-proceed" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-black text-xs rounded-xl shadow-lg shadow-rose-600/20 transition-all">確定清空</button>
+                <button id="confirm-modal-proceed" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-black text-xs rounded-xl shadow-lg shadow-rose-600/20 transition-all">確定執行</button>
             </div>
         </div>
     </div>
@@ -325,7 +328,7 @@
     <div id="sync-settings-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
         <div class="glass-panel border border-blue-500/30 max-w-lg w-full mx-4 rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 flex flex-col gap-4">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <div class="flex items-center gap-2.5 text-blue-450">
+                <div class="flex items-center gap-2.5 text-blue-400">
                     <i class="fa-solid fa-cloud-arrow-down text-xl"></i>
                     <h3 class="text-lg font-black">雲端同步大陣設定</h3>
                 </div>
@@ -334,19 +337,19 @@
             <div class="flex flex-col gap-3">
                 <div>
                     <label class="block text-[10px] text-blue-300 font-extrabold mb-1">GitHub JSON Raw URL</label>
-                    <textarea id="modal-sync-url-input" rows="3" class="w-full px-3 py-2.5 bg-slate-950 border border-slate-850 focus:border-blue-500 rounded-xl text-xs font-semibold text-slate-200 outline-none transition-colors custom-scrollbar resize-none"></textarea>
+                    <textarea id="modal-sync-url-input" rows="4" class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-xl text-xs font-semibold text-slate-200 outline-none transition-colors custom-scrollbar resize-none"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-[10px] text-blue-300 font-extrabold mb-1">同步覆蓋模式</label>
-                        <select id="modal-sync-mode" class="w-full px-2.5 py-2 bg-slate-900 border border-slate-850 rounded-lg text-xs font-bold text-slate-200 outline-none">
+                        <select id="modal-sync-mode" class="w-full px-2.5 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-slate-200 outline-none">
                             <option value="merge">合併儲存 (保留現有)</option>
                             <option value="overwrite">完全覆蓋 (清空舊大典)</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-[10px] text-blue-300 font-extrabold mb-1">自動同步機制</label>
-                        <select id="modal-sync-onload" class="w-full px-2.5 py-2 bg-slate-900 border border-slate-850 rounded-lg text-xs font-bold text-slate-200 outline-none">
+                        <select id="modal-sync-onload" class="w-full px-2.5 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-slate-200 outline-none">
                             <option value="true">開啟：網頁載入時自動拉取</option>
                             <option value="false">關閉：手動點擊才拉取</option>
                         </select>
@@ -354,8 +357,8 @@
                 </div>
             </div>
             <div class="flex gap-3 justify-end mt-2">
-                <button onclick="fillModalSampleUrl()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-blue-300 font-bold text-xs rounded-xl border border-slate-800 transition-all">帶入測試 JSON 連結</button>
-                <button onclick="saveAndTriggerSync()" class="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5"><i class="fa-solid fa-bolt text-xs"></i> 啟動並儲存法陣</button>
+                <button onclick="fillModalSampleUrl()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-blue-300 font-bold text-xs rounded-xl border border-slate-800 transition-all">還原預設全題庫連結</button>
+                <button onclick="saveAndTriggerSync()" class="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5"><i class="fa-solid fa-bolt text-xs"></i> 立即同步並儲存</button>
             </div>
         </div>
     </div>
@@ -373,7 +376,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 text-center"><span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">修煉總次數</span><span id="stats-total-answered" class="text-2xl sm:text-3xl font-black text-white font-mono">0</span></div>
                 <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 text-center"><span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">境界修行正確率</span><span id="stats-accuracy" class="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">0%</span></div>
-                <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 text-center"><span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">當前修行連擊</span><span id="stats-current-streak" class="text-2xl sm:text-3xl font-black text-orange-450 font-mono">0</span></div>
+                <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 text-center"><span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">當前修行連擊</span><span id="stats-current-streak" class="text-2xl sm:text-3xl font-black text-orange-400 font-mono">0</span></div>
                 <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 text-center"><span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">歷史最高連擊</span><span id="stats-highest-streak" class="text-2xl sm:text-3xl font-black text-orange-400 font-mono">0</span></div>
             </div>
             <div class="p-4 rounded-2xl bg-slate-950/40 border border-slate-800 flex items-center justify-between gap-4">
@@ -388,7 +391,8 @@
     </div>
 
     <script>
-        const DEFAULT_SYNC_URLS = [
+        // 統一採用 raw.githubusercontent.com 直連格式，避免 GitHub blob 跨網域 CORS 跳轉失敗
+        const DEFAULT_SYNC_URLS_ARRAY = [
             "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/affix.json",
             "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/exam_advanced.json",
             "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/exam_basic.json",
@@ -397,17 +401,18 @@
             "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/vocab_basic.json",
             "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/vocab_intermediate.json",
             "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/inversion.json",
-            "https://github.com/less1324-blip/yichentesting/blob/main/五大句型文法.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/八大詞類文法.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/副詞子句.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/句型結構文法.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/名詞子句.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/%E7%89%B9%E6%AE%8A%E5%8B%95%E8%A9%9E.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/虛主詞.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/關係代名詞.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/12時態.json?raw=true",
-            "https://github.com/less1324-blip/yichentesting/blob/main/Irregular%20Verbs%20Table.json?raw=true"
-        ].join('\n');
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E4%BA%94%E5%A4%A7%E5%8F%A5%E5%9E%8B%E6%96%87%E6%B3%95.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E5%85%AB%E5%A4%A7%E8%A9%9E%E9%A1%9E%E6%96%87%E6%B3%95.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E5%89%AF%E8%A9%9E%E5%AD%90%E5%8F%A5.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E5%8F%A5%E5%9E%8B%E7%B5%90%E6%A7%8B%E6%96%87%E6%B3%95.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E5%90%8D%E8%A9%9E%E5%AD%90%E5%8F%A5.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E7%89%B9%E6%AE%8A%E5%8B%95%E8%A9%9E.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E8%99%9B%E4%B8%BB%E8%A9%9E.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/%E9%97%9C%E4%BF%82%E4%BB%A3%E5%90%8D%E8%A9%9E.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/12%E6%99%82%E6%85%8B.json",
+            "https://raw.githubusercontent.com/less1324-blip/yichentesting/refs/heads/main/Irregular%20Verbs%20Table.json"
+        ];
+        const DEFAULT_SYNC_URLS = DEFAULT_SYNC_URLS_ARRAY.join('\n');
 
         const GRAMMAR_UNITS_DATA = [
             { id: 'pos', name: '八大詞類' }, { id: 'pattern', name: '五大句型' }, { id: 'special_verbs', name: '特殊動詞' },
@@ -422,6 +427,16 @@
             { id: 'intermediate', name: '中級單字', examName: '中級考題' },
             { id: 'advanced', name: '中高級單字', examName: '中高級考題' }
         ];
+
+        function normalizeGithubRawUrl(rawUrl) {
+            let url = rawUrl.trim();
+            if (!url) return '';
+            url = url.replace(/\?raw=true$/i, '');
+            if (/^https:\/\/github\.com\//i.test(url)) {
+                url = url.replace(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/i, 'https://raw.githubusercontent.com/$1/$2/refs/heads/$3/$4');
+            }
+            return url;
+        }
 
         function createEmptyDB() {
             let db = { vocab: {}, phrase: {}, affix: {}, exam: {}, grammar: {} };
@@ -473,7 +488,7 @@
         function prevAffixSlide() { playSound('click'); if (currentAffixSlide > 1) currentAffixSlide--; updateAffixSlides(); }
 
         function getThemeColors() {
-            const isVocab = userState.currentDojo === 'vocab', isPhrase = userState.currentDojo === 'phrase', isAffix = userState.currentDojo === 'affix', isExam = userState.currentDojo === 'exam', isGrammar = userState.currentDojo === 'grammar';
+            const isVocab = userState.currentDojo === 'vocab', isPhrase = userState.currentDojo === 'phrase', isAffix = userState.currentDojo === 'affix', isExam = userState.currentDojo === 'exam';
             return {
                 primary: isVocab ? 'orange-500' : isPhrase ? 'blue-600' : isAffix ? 'emerald-500' : isExam ? 'purple-500' : 'rose-500',
                 primaryHover: isVocab ? 'orange-400' : isPhrase ? 'blue-500' : isAffix ? 'emerald-400' : isExam ? 'purple-400' : 'rose-400',
@@ -712,8 +727,18 @@
             if (savedState) {
                 try { 
                     userState = { ...userState, ...JSON.parse(savedState) }; 
-                    if (!userState.autoSyncUrl || !userState.autoSyncUrl.includes("%E7%89%B9%E6%AE%8A%E5%8B%95%E8%A9%9E")) userState.autoSyncUrl = DEFAULT_SYNC_URLS;
-                } catch(e) {}
+                    // 確保預設的 18 個 GitHub 檔案都在同步清單中，且強制開啟自動同步
+                    let currentUrls = (userState.autoSyncUrl || "").split('\n').map(normalizeGithubRawUrl).filter(Boolean);
+                    DEFAULT_SYNC_URLS_ARRAY.forEach(defUrl => {
+                        const normDef = normalizeGithubRawUrl(defUrl);
+                        if (!currentUrls.includes(normDef)) currentUrls.push(normDef);
+                    });
+                    userState.autoSyncUrl = currentUrls.join('\n');
+                    userState.autoSyncOnLoad = true;
+                } catch(e) {
+                    userState.autoSyncUrl = DEFAULT_SYNC_URLS;
+                    userState.autoSyncOnLoad = true;
+                }
             }
             if (savedMainDb) {
                 try { 
@@ -731,7 +756,6 @@
             }
             
             // Ensure schema
-            const emptyDB = createEmptyDB();
             VOCAB_DIFFS_DATA.forEach(d => {
                 for (let l = 1; l <= 10; l++) { mainDatabase.vocab[d.id] = mainDatabase.vocab[d.id] || {}; mainDatabase.vocab[d.id][l] = mainDatabase.vocab[d.id][l] || []; }
                 for (let l = 1; l <= 30; l++) { mainDatabase.exam[d.id] = mainDatabase.exam[d.id] || {}; mainDatabase.exam[d.id][l] = mainDatabase.exam[d.id][l] || []; }
@@ -859,9 +883,9 @@
 
             diffTabs.forEach(diff => {
                 const isActive = userState.currentDifficulty === diff.id;
-                const activeStyle = isActive ? `bg-${theme.primaryHover} ${(isExam || isGrammar) ? 'text-white' : 'text-slate-950'} font-black ${theme.shadow} scale-105 border-${theme.primaryHover}` : 'bg-slate-900/60 text-slate-450 hover:text-slate-200 border-slate-800/85 hover:border-slate-700 hover:bg-slate-800/40';
+                const activeStyle = isActive ? `bg-${theme.primaryHover} ${(isExam || isGrammar) ? 'text-white' : 'text-slate-950'} font-black ${theme.shadow} scale-105 border-${theme.primaryHover}` : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border-slate-800 hover:border-slate-700 hover:bg-slate-800/40';
                 let displayName = isGrammar ? `<i class="fa-solid fa-folder mr-1.5 opacity-80 text-[10px]"></i>${diff.name}` : (isExam ? diff.examName : `<i class="fa-solid fa-leaf mr-1.5 opacity-80 text-[10px]"></i>${diff.name}`);
-                container.innerHTML += `<button onclick="selectDifficulty('${diff.id}')" class="flex-1 min-w-[110px] px-3 py-2 sm:px-4 rounded-xl border text-[11px] sm:text-xs transition-all duration-350 font-bold ${activeStyle}">${displayName}</button>`;
+                container.innerHTML += `<button onclick="selectDifficulty('${diff.id}')" class="flex-1 min-w-[110px] px-3 py-2 sm:px-4 rounded-xl border text-[11px] sm:text-xs transition-all duration-300 font-bold ${activeStyle}">${displayName}</button>`;
             });
         }
 
@@ -911,8 +935,8 @@
             container.innerHTML = ''; const theme = getThemeColors();
             for (let i = 1; i <= 10; i++) {
                 const isActive = userState.currentUnit === i;
-                const activeStyle = isActive ? `bg-${theme.primaryHover} text-slate-950 font-black ${theme.shadow} scale-105 border-${theme.primary}` : 'bg-slate-900/60 text-slate-450 hover:text-slate-200 border-slate-800/85 hover:border-slate-700 hover:bg-slate-800/40';
-                container.innerHTML += `<button onclick="selectUnit(${i})" class="px-2.5 py-1.5 sm:px-3 rounded-xl border text-[11px] sm:text-xs transition-all duration-350 font-mono ${activeStyle}">Unit ${i}</button>`;
+                const activeStyle = isActive ? `bg-${theme.primaryHover} text-slate-950 font-black ${theme.shadow} scale-105 border-${theme.primary}` : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border-slate-800 hover:border-slate-700 hover:bg-slate-800/40';
+                container.innerHTML += `<button onclick="selectUnit(${i})" class="px-2.5 py-1.5 sm:px-3 rounded-xl border text-[11px] sm:text-xs transition-all duration-300 font-mono ${activeStyle}">Unit ${i}</button>`;
             }
         }
 
@@ -937,8 +961,8 @@
                 
                 let baseClasses = '';
                 if (userState.currentTab === tab) baseClasses = `w-full py-2.5 sm:py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 sm:gap-2 font-black text-xs sm:text-sm transition-all duration-200 ${theme.btnTheme} shadow-md`;
-                else if (tab === 'admin') baseClasses = `w-full py-2.5 sm:py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm transition-all duration-200 bg-slate-900/60 text-blue-300 hover:text-blue-100 border border-blue-500/20 hover:bg-slate-850`;
-                else baseClasses = `w-full py-2.5 sm:py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm transition-all duration-200 bg-slate-900/60 text-slate-400 hover:text-slate-100 border border-slate-800 hover:bg-slate-800/55`;
+                else if (tab === 'admin') baseClasses = `w-full py-2.5 sm:py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm transition-all duration-200 bg-slate-900/60 text-blue-300 hover:text-blue-100 border border-blue-500/20 hover:bg-slate-800`;
+                else baseClasses = `w-full py-2.5 sm:py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm transition-all duration-200 bg-slate-900/60 text-slate-400 hover:text-slate-100 border border-slate-800 hover:bg-slate-800/60`;
                 
                 if (isExamOrGrammar && ['flashcard', 'spelling', 'cloze'].includes(tab)) btn.className = `${baseClasses} hidden`;
                 else btn.className = baseClasses;
@@ -951,7 +975,7 @@
             if (userState.currentTab === 'review') { renderReviewTab(); return; }
             if (dataList.length === 0) {
                 const theme = getThemeColors(); const unitText = ['affix', 'exam', 'grammar'].includes(userState.currentDojo) ? '' : ` - Unit ${userState.currentUnit}`;
-                contentDiv.innerHTML = `<div class="flex flex-col items-center justify-center py-12 text-slate-400"><div class="p-4 ${theme.bgLight} rounded-full border ${theme.border} mb-4 animate-bounce"><i class="fa-solid fa-folder-open text-5xl ${theme.text}"></i></div><p class="font-extrabold text-slate-200 text-center text-base sm:text-lg">修煉境界 L${userState.currentLevel}${unitText} 目前沒有資料！</p><p class="text-xs text-slate-500 mt-2 max-w-sm text-center leading-relaxed">請點擊下方的「📥 匯入管理」，輸入密碼「yichen」後自訂匯入，或於頂部設定「雲端同步法陣」拉取教師教材！</p><button onclick="switchTab('admin')" class="mt-6 px-6 py-2.5 bg-gradient-to-r ${theme.gradient} hover:opacity-90 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg ${theme.shadow} flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> 立即解鎖管理後台</button></div>`;
+                contentDiv.innerHTML = `<div class="flex flex-col items-center justify-center py-12 text-slate-400"><div class="p-4 ${theme.bgLight} rounded-full border ${theme.border} mb-4 animate-bounce"><i class="fa-solid fa-folder-open text-5xl ${theme.text}"></i></div><p class="font-extrabold text-slate-200 text-center text-base sm:text-lg">修煉境界 L${userState.currentLevel}${unitText} 目前沒有資料！</p><p class="text-xs text-slate-500 mt-2 max-w-sm text-center leading-relaxed">系統正在從 GitHub 雲端大陣同步題庫，或此單元尚無題目。您也可點擊下方「📥 匯入管理」自訂新增！</p><button onclick="switchTab('admin')" class="mt-6 px-6 py-2.5 bg-gradient-to-r ${theme.gradient} hover:opacity-90 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg ${theme.shadow} flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> 立即解鎖管理後台</button></div>`;
                 return;
             }
             if (userState.flashcardIndex >= dataList.length) userState.flashcardIndex = 0; if (userState.quizIndex >= dataList.length) userState.quizIndex = 0;
@@ -1086,7 +1110,7 @@
             const unitText = ['affix', 'exam', 'grammar'].includes(userState.currentDojo) ? '' : ` - Unit ${userState.currentUnit}`;
             const dbName = `⛩️ 修煉大典 ${diffName}境界 L${userState.currentLevel}${unitText}`; const theme = getThemeColors();
             
-            let listHTML = `<div class="flex flex-col gap-4"><div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-3"><h3 class="font-extrabold text-sm sm:text-base flex items-center gap-2"><i class="fa-solid fa-crown ${theme.text}"></i>${dbName}</h3><div class="flex items-center gap-2"><button id="play-all-btn" onclick="togglePlayAll()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-550 text-white rounded-xl font-bold text-[10px] sm:text-xs transition-all shadow-md flex items-center gap-1.5">${isPlayingAll ? '<i class="fa-solid fa-stop"></i> 停止朗讀' : '<i class="fa-solid fa-play"></i> 循序朗讀全部'}</button><span class="text-[10px] sm:text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-xl font-black font-mono border border-slate-800">共 ${data.length} 項</span></div></div><div class="flex flex-col gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar" id="list-scroll-container">`;
+            let listHTML = `<div class="flex flex-col gap-4"><div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-3"><h3 class="font-extrabold text-sm sm:text-base flex items-center gap-2"><i class="fa-solid fa-crown ${theme.text}"></i>${dbName}</h3><div class="flex items-center gap-2"><button id="play-all-btn" onclick="togglePlayAll()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-[10px] sm:text-xs transition-all shadow-md flex items-center gap-1.5">${isPlayingAll ? '<i class="fa-solid fa-stop"></i> 停止朗讀' : '<i class="fa-solid fa-play"></i> 循序朗讀全部'}</button><span class="text-[10px] sm:text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-xl font-black font-mono border border-slate-800">共 ${data.length} 項</span></div></div><div class="flex flex-col gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar" id="list-scroll-container">`;
 
             data.forEach((item, idx) => {
                 const safeWord = item.word.replace(/'/g, "\\'"); const safeExample = item.example.replace(/'/g, "\\'"); const clickableExample = createClickableSentence(item.example);
@@ -1098,10 +1122,10 @@
                     <div id="list-item-${idx}" class="p-5 rounded-2xl bg-slate-900/40 border border-slate-800/80 transition-all duration-300 ${theme.border} flex flex-col justify-between group hover:bg-slate-800/40">
                         <div class="flex items-center justify-between gap-4 mb-3">
                             <div class="flex-1"><h4 id="list-word-${idx}" class="text-xl sm:text-2xl font-black tracking-wide text-white flex flex-wrap items-center gap-3 ${theme.textHover} transition-colors p-1 rounded-lg">${affixWordHTML} ${item.phonetic ? `<span class="text-sm text-slate-500 font-medium font-mono">${item.phonetic}</span>` : ''}</h4><div class="mt-2 flex flex-col items-start gap-1.5"><p class="text-sm sm:text-base text-slate-200 font-semibold bg-slate-950/50 px-3 py-1 rounded-lg inline-block border border-slate-800/50">${item.chinese}</p>${userState.currentDojo === 'affix' && item.rule ? `<div class="px-2.5 py-1 rounded-lg ${theme.bgLight} ${theme.border} text-[11px] sm:text-xs ${theme.text} font-bold mt-1"><i class="fa-solid fa-lightbulb mr-1.5"></i>拆解法則：${item.rule}</div>` : ''}</div></div>
-                            <button onclick="speakWord('${safeWord}')" class="w-12 h-12 flex items-center justify-center text-slate-400 ${theme.textHover} rounded-xl bg-slate-850 hover:bg-slate-800 active:scale-90 transition-all shrink-0 shadow-sm border border-slate-800" title="僅朗讀單字"><i class="fa-solid fa-volume-high text-lg"></i></button>
+                            <button onclick="speakWord('${safeWord}')" class="w-12 h-12 flex items-center justify-center text-slate-400 ${theme.textHover} rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-90 transition-all shrink-0 shadow-sm border border-slate-800" title="僅朗讀單字"><i class="fa-solid fa-volume-high text-lg"></i></button>
                         </div>
                         <div class="border-t border-slate-800/60 pt-4 mt-1">
-                            <div class="flex items-start justify-between gap-4"><div class="flex-1"><p id="list-eg-${idx}" class="text-base sm:text-lg font-bold text-slate-300 leading-relaxed p-1">${clickableExample}</p><p class="mt-2 text-sm sm:text-base text-slate-450 font-bold leading-relaxed p-1">${item.exampleCn}</p></div><button onclick="speakWord('${safeExample}')" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-orange-400 rounded-lg bg-slate-900 hover:bg-slate-800 transition-all shrink-0 border border-slate-800" title="僅朗讀例句"><i class="fa-solid fa-comment-dots text-sm"></i></button></div>
+                            <div class="flex items-start justify-between gap-4"><div class="flex-1"><p id="list-eg-${idx}" class="text-base sm:text-lg font-bold text-slate-300 leading-relaxed p-1">${clickableExample}</p><p class="mt-2 text-sm sm:text-base text-slate-400 font-bold leading-relaxed p-1">${item.exampleCn}</p></div><button onclick="speakWord('${safeExample}')" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-orange-400 rounded-lg bg-slate-900 hover:bg-slate-800 transition-all shrink-0 border border-slate-800" title="僅朗讀例句"><i class="fa-solid fa-comment-dots text-sm"></i></button></div>
                         </div>
                     </div>
                 `;
@@ -1126,7 +1150,7 @@
                             <div class="absolute inset-0 w-full h-full rounded-3xl p-6 flex flex-col items-center justify-between bg-slate-900 border ${theme.border} ${theme.shadow} text-slate-100 shadow-xl flip-card-back"><div class="w-full flex justify-between items-start"><span class="text-[9px] uppercase font-black tracking-widest px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400">背面 / 釋義與例句</span><i class="fa-solid fa-rotate text-sm opacity-60 text-slate-400"></i></div><div class="text-center px-2 my-auto flex flex-col gap-1.5 w-full"><h3 class="text-xl sm:text-2xl font-black ${theme.text} tracking-wide">${item.chinese}</h3><div class="border-t border-slate-800/80 pt-3 mt-3 w-full"><p class="text-sm sm:text-base text-slate-200 font-semibold italic leading-relaxed text-left">"${item.example}"</p><p class="text-xs sm:text-sm text-slate-400 font-medium mt-1.5 leading-relaxed text-left">${item.exampleCn}</p></div></div><div class="text-[10px] font-bold text-slate-500">點擊卡牌翻回英文</div></div>
                         </div>
                     </div>
-                    <div class="hidden sm:flex items-center gap-4 text-[10px] font-bold text-slate-500"><span><kbd class="bg-slate-950 px-1.5 py-0.5 rounded text-slate-400 border border-slate-850">空白鍵</kbd> 翻轉</span><span><kbd class="bg-slate-950 px-1.5 py-0.5 rounded text-slate-400 border border-slate-850">← / →</kbd> 切換</span></div>
+                    <div class="hidden sm:flex items-center gap-4 text-[10px] font-bold text-slate-500"><span><kbd class="bg-slate-950 px-1.5 py-0.5 rounded text-slate-400 border border-slate-800">空白鍵</kbd> 翻轉</span><span><kbd class="bg-slate-950 px-1.5 py-0.5 rounded text-slate-400 border border-slate-800">← / →</kbd> 切換</span></div>
                     <div class="flex gap-4 w-full max-w-sm justify-between items-center">
                         <button onclick="navigateFlashcard(-1, ${data.length})" class="flex-1 py-2.5 bg-slate-900 border border-slate-800 hover:border-slate-700 hover:text-white rounded-2xl text-slate-400 font-bold text-xs sm:text-sm transition-all duration-200"><i class="fa-solid fa-arrow-left mr-1.5"></i>上一個</button>
                         <button onclick="speakWord('${safeWord}'); setTimeout(() => speakWord('${safeExample}'), 800);" class="w-11 h-11 flex items-center justify-center rounded-full ${theme.bgLight} ${theme.bgHover} ${theme.text} border ${theme.border} active:scale-95 transition-all shadow-lg" title="朗讀"><i class="fa-solid fa-volume-high text-base"></i></button>
@@ -1179,7 +1203,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto" id="quiz-options-container">
                         ${generatedOptions.map((opt, oIdx) => `<button onclick="checkQuizAnswer('${opt.word.replace(/'/g, "\\'")}', this, ${userState.quizIndex}, ${data.length})" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 text-left font-bold text-sm sm:text-base transition-all duration-200 flex items-center justify-between group active:scale-98"><span>${oIdx + 1}. ${opt.chinese}</span><span class="opacity-0 group-hover:opacity-40 text-[10px] transition-all duration-200 font-mono">按 ${oIdx + 1} <i class="fa-solid fa-hand-pointer ml-1"></i></span></button>`).join('')}
                     </div>
-                    <div class="hidden sm:flex justify-center items-center gap-4 text-[10px] font-bold text-slate-500"><span>按鍵 <kbd class="bg-slate-950 px-1.5 py-0.5 rounded text-slate-400 border border-slate-850">1 - 4</kbd> 選取選項</span><span>敲擊 <kbd class="bg-slate-950 px-1.5 py-0.5 rounded text-slate-400 border border-slate-850">Enter</kbd> 快速下一題</span></div>
+                    <div class="hidden sm:flex justify-center items-center gap-4 text-[10px] font-bold text-slate-500"><span>按鍵 <kbd class="bg-slate-950 px-1.5 py-0.5 rounded text-slate-400 border border-slate-800">1 - 4</kbd> 選取選項</span><span>敲擊 <kbd class="bg-slate-950 px-1.5 py-0.5 rounded text-slate-400 border border-slate-800">Enter</kbd> 快速下一題</span></div>
                     <div id="quiz-action-bar" class="flex justify-end mt-2 hidden"><button onclick="nextQuizQuestion(${data.length})" class="py-2.5 px-5 bg-gradient-to-r ${theme.gradientNext} hover:opacity-90 text-slate-950 font-black text-xs sm:text-sm rounded-xl flex items-center gap-2 shadow-lg ${theme.shadow} transition-all duration-200">下一題 <i class="fa-solid fa-arrow-right"></i></button></div>
                 </div>
             `;
@@ -1219,15 +1243,15 @@
 
             contentDiv.innerHTML = `
                 <div class="flex flex-col justify-between min-h-[360px] gap-4">
-                    <div class="w-full flex justify-between items-center text-xs text-slate-400 font-bold border-b border-slate-800/80 pb-3"><span class="flex items-center gap-1.5"><i class="fa-solid fa-spell-check ${theme.text}"></i> 字彙拼字淬鍊 - 第 ${userState.spellingIndex + 1} / ${data.length} 題</span><span class="text-slate-450 font-bold">當前連擊: ${userState.streak} 🔥</span></div>
+                    <div class="w-full flex justify-between items-center text-xs text-slate-400 font-bold border-b border-slate-800/80 pb-3"><span class="flex items-center gap-1.5"><i class="fa-solid fa-spell-check ${theme.text}"></i> 字彙拼字淬鍊 - 第 ${userState.spellingIndex + 1} / ${data.length} 題</span><span class="text-slate-400 font-bold">當前連擊: ${userState.streak} 🔥</span></div>
                     <div class="text-center my-2 py-1"><span class="text-[9px] uppercase font-black tracking-widest px-2.5 py-1 rounded-full ${theme.bgLight} ${theme.text}">中文指引與拼字</span><h3 class="text-xl sm:text-2xl font-black ${theme.text} mt-2.5">${currentItem.chinese}</h3><p class="text-xs text-slate-500 mt-1.5 italic font-black tracking-widest font-mono select-none">提示：${masked}</p></div>
                     <div class="w-full max-w-md mx-auto flex flex-col gap-3">
                         <div class="flex gap-2.5 items-center w-full">
-                            <button onclick="speakWord('${currentItem.word.replace(/'/g, "\\'")}')" class="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-750 ${theme.text} transition-all active:scale-95 shrink-0 shadow-md relative" title="朗讀單字"><i class="fa-solid fa-volume-high text-base relative z-10"></i><div class="voice-wave-container hidden absolute inset-0 ${theme.bgLight} rounded-xl flex items-center justify-center gap-0.5"><span class="audio-wave-bar w-1 h-3 ${theme.waveColor} rounded-full"></span><span class="audio-wave-bar w-1 h-4 ${theme.waveColor} rounded-full"></span><span class="audio-wave-bar w-1 h-3 ${theme.waveColor} rounded-full"></span></div></button>
-                            <input type="text" id="spelling-input" placeholder="請拼寫或點擊碎片填寫..." autocomplete="off" class="flex-1 px-4 py-3 bg-slate-950 border border-slate-850 ${theme.borderFocus} rounded-xl font-bold tracking-wide outline-none text-slate-100 placeholder-slate-700 transition-colors shadow-inner text-base sm:text-lg" oninput="updateSpellingFragments(this.value)" onkeydown="handleSpellingEnter(event, ${userState.spellingIndex}, ${data.length})" />
+                            <button onclick="speakWord('${currentItem.word.replace(/'/g, "\\'")}')" class="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 ${theme.text} transition-all active:scale-95 shrink-0 shadow-md relative" title="朗讀單字"><i class="fa-solid fa-volume-high text-base relative z-10"></i><div class="voice-wave-container hidden absolute inset-0 ${theme.bgLight} rounded-xl flex items-center justify-center gap-0.5"><span class="audio-wave-bar w-1 h-3 ${theme.waveColor} rounded-full"></span><span class="audio-wave-bar w-1 h-4 ${theme.waveColor} rounded-full"></span><span class="audio-wave-bar w-1 h-3 ${theme.waveColor} rounded-full"></span></div></button>
+                            <input type="text" id="spelling-input" placeholder="請拼寫或點擊碎片填寫..." autocomplete="off" class="flex-1 px-4 py-3 bg-slate-950 border border-slate-800 ${theme.borderFocus} rounded-xl font-bold tracking-wide outline-none text-slate-100 placeholder-slate-700 transition-colors shadow-inner text-base sm:text-lg" oninput="updateSpellingFragments(this.value)" onkeydown="handleSpellingEnter(event, ${userState.spellingIndex}, ${data.length})" />
                             <button onclick="document.getElementById('spelling-input').value = ''; updateSpellingFragments('');" class="w-10 h-12 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-800 hover:text-rose-400 text-slate-500 transition-colors" title="清除輸入"><i class="fa-solid fa-delete-left"></i></button>
                         </div>
-                        <div id="scrambled-hint-container" class="hidden flex-wrap gap-2 justify-center py-2 bg-slate-950/40 p-3 rounded-xl border border-slate-850 animate-fade-in"><span class="text-[9px] text-slate-500 font-extrabold w-full text-center uppercase tracking-wider mb-1"><i class="fa-solid fa-hand-pointer mr-1"></i>點擊碎片直接填入</span>${scrambledHtml}</div>
+                        <div id="scrambled-hint-container" class="hidden flex-wrap gap-2 justify-center py-2 bg-slate-950/40 p-3 rounded-xl border border-slate-800 animate-fade-in"><span class="text-[9px] text-slate-500 font-extrabold w-full text-center uppercase tracking-wider mb-1"><i class="fa-solid fa-hand-pointer mr-1"></i>點擊碎片直接填入</span>${scrambledHtml}</div>
                     </div>
                     <div class="w-full max-w-md mx-auto flex flex-col gap-2.5 mt-2">
                         <div class="flex justify-between gap-3">
@@ -1236,7 +1260,7 @@
                             <button onclick="checkSpelling('${currentItem.word.replace(/'/g, "\\'")}', ${userState.spellingIndex}, ${data.length})" class="flex-1 py-2.5 ${theme.btnTheme} font-black text-xs sm:text-sm rounded-xl flex items-center justify-center gap-1.5 shadow-lg transition-all"><i class="fa-solid fa-circle-check"></i>提交修行</button>
                         </div>
                         <div id="spelling-feedback" class="hidden p-4 rounded-xl text-center transition-all duration-300"></div>
-                        <button id="spelling-next-btn" onclick="nextSpellingQuestion(${data.length})" class="hidden py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:opacity-95 text-slate-950 font-black text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-550/15 transition-all mt-1">進入下一次淬鍊 <i class="fa-solid fa-arrow-right"></i></button>
+                        <button id="spelling-next-btn" onclick="nextSpellingQuestion(${data.length})" class="hidden py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:opacity-95 text-slate-950 font-black text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/15 transition-all mt-1">進入下一次淬鍊 <i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                 </div>
             `;
@@ -1271,10 +1295,10 @@
 
             if (cleanUserAns === cleanRealAns) {
                 playSound('correct'); feedback.className = "p-3.5 rounded-xl text-center bg-emerald-500/10 border border-emerald-500 text-emerald-400 shadow-neon-emerald"; feedback.innerHTML = `<i class="fa-solid fa-square-check mr-1.5"></i><span class="text-sm font-black">修煉成功！毫釐不差：</span><br><span class="font-mono text-white text-2xl font-black tracking-widest mt-2 inline-block">${correctWord}</span>`;
-                userState.streak += 1; userState.correctCount += 1; const gainedExp = 25; const lvlUp = addEXP(gainedExp); showToast("拼寫正確！增加修为 +25", 'success');
+                userState.streak += 1; userState.correctCount += 1; const gainedExp = 25; const lvlUp = addEXP(gainedExp); showToast("拼寫正確！增加修為 +25", 'success');
                 setTimeout(() => nextSpellingQuestion(dataLength), 1500);
             } else {
-                playSound('wrong'); addMistake(getActiveDataList()[idx], 'spelling'); feedback.className = "p-4 rounded-xl text-center bg-rose-500/10 border border-rose-500 text-rose-350 shadow-neon-rose"; feedback.innerHTML = `<div class="flex flex-col gap-2 items-center"><div class="text-sm font-bold"><i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-400"></i>拼寫失誤！正確答案為：</div><div class="bg-slate-950 py-3 px-6 rounded-xl border border-slate-800 w-full"><span class="font-mono text-rose-100 text-3xl font-black tracking-widest">${correctWord}</span></div></div>`;
+                playSound('wrong'); addMistake(getActiveDataList()[idx], 'spelling'); feedback.className = "p-4 rounded-xl text-center bg-rose-500/10 border border-rose-500 text-rose-300 shadow-neon-rose"; feedback.innerHTML = `<div class="flex flex-col gap-2 items-center"><div class="text-sm font-bold"><i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-400"></i>拼寫失誤！正確答案為：</div><div class="bg-slate-950 py-3 px-6 rounded-xl border border-slate-800 w-full"><span class="font-mono text-rose-100 text-3xl font-black tracking-widest">${correctWord}</span></div></div>`;
                 userState.streak = 0; showToast(`字彙偏差，請牢記正確拼法！`, 'error'); nextBtn.classList.remove('hidden');
             }
             saveProgress(); updateHeaderUI();
@@ -1296,20 +1320,20 @@
 
             contentDiv.innerHTML = `
                 <div class="flex flex-col justify-between min-h-[360px] gap-4">
-                    <div class="w-full flex justify-between items-center text-xs text-slate-400 font-bold border-b border-slate-800/80 pb-3"><span class="flex items-center gap-1.5"><i class="fa-solid fa-file-pen text-emerald-450"></i> 語境填空挑戰 - 第 ${userState.clozeIndex + 1} / ${data.length} 題</span><span class="text-slate-450 font-bold">當前連擊: ${userState.streak} 🔥</span></div>
+                    <div class="w-full flex justify-between items-center text-xs text-slate-400 font-bold border-b border-slate-800/80 pb-3"><span class="flex items-center gap-1.5"><i class="fa-solid fa-file-pen text-emerald-400"></i> 語境填空挑戰 - 第 ${userState.clozeIndex + 1} / ${data.length} 題</span><span class="text-slate-400 font-bold">當前連擊: ${userState.streak} 🔥</span></div>
                     <div class="flex items-center gap-4 text-center my-2 py-3 px-4 bg-slate-950/30 rounded-2xl border border-slate-800/50 max-w-3xl mx-auto w-full relative"><button onclick="speakWord('${fullSentence.replace(/'/g, "\\'")}')" class="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-800 hover:text-orange-400 text-slate-400 transition-all active:scale-95 shrink-0 shadow-sm" title="朗讀語境"><i class="fa-solid fa-volume-high text-lg"></i></button><div class="flex-1"><span class="text-[9px] uppercase font-black tracking-widest px-2.5 py-1 rounded-full ${theme.bgLight} ${theme.text}">請推敲填入空白處</span><h3 class="text-base sm:text-xl font-extrabold text-slate-100 tracking-wide mt-3.5 leading-relaxed">${qText}</h3></div></div>
                     <div class="w-full max-w-md mx-auto flex flex-col gap-3">
-                        <input type="text" id="cloze-input" placeholder="請填寫對應的英文解答..." autocomplete="off" class="w-full px-4 py-3 bg-slate-950 border border-slate-850 ${theme.borderFocus} rounded-xl font-bold tracking-wide outline-none text-slate-100 placeholder-slate-700 transition-colors shadow-inner text-center text-base sm:text-lg" onkeydown="handleClozeEnter(event, '${qAns.replace(/'/g, "\\'")}', ${data.length}, '${fullSentence.replace(/'/g, "\\'")}')" />
-                        <div id="cloze-suggestion-container" class="hidden flex-wrap gap-1.5 justify-center py-2 bg-slate-950/40 p-2.5 rounded-xl border border-slate-850 animate-fade-in"><span class="text-[9px] text-slate-500 font-extrabold w-full text-center uppercase tracking-wider mb-1"><i class="fa-solid fa-puzzle-piece mr-1"></i>字母拼圖碎片</span>${scrambleWordLetters(qAns).map(char => `<span class="px-2 py-1 bg-slate-900 border border-slate-800 text-emerald-450 rounded-md font-mono text-base sm:text-lg font-bold">${char}</span>`).join('')}</div>
+                        <input type="text" id="cloze-input" placeholder="請填寫對應的英文解答..." autocomplete="off" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 ${theme.borderFocus} rounded-xl font-bold tracking-wide outline-none text-slate-100 placeholder-slate-700 transition-colors shadow-inner text-center text-base sm:text-lg" onkeydown="handleClozeEnter(event, '${qAns.replace(/'/g, "\\'")}', ${data.length}, '${fullSentence.replace(/'/g, "\\'")}')" />
+                        <div id="cloze-suggestion-container" class="hidden flex-wrap gap-1.5 justify-center py-2 bg-slate-950/40 p-2.5 rounded-xl border border-slate-800 animate-fade-in"><span class="text-[9px] text-slate-500 font-extrabold w-full text-center uppercase tracking-wider mb-1"><i class="fa-solid fa-puzzle-piece mr-1"></i>字母拼圖碎片</span>${scrambleWordLetters(qAns).map(char => `<span class="px-2 py-1 bg-slate-900 border border-slate-800 text-emerald-400 rounded-md font-mono text-base sm:text-lg font-bold">${char}</span>`).join('')}</div>
                     </div>
                     <div class="w-full max-w-md mx-auto flex flex-col gap-2.5">
                         <div class="flex justify-between gap-3">
-                            <button onclick="toggleClozeLetters()" class="flex-1 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 hover:text-slate-200 text-slate-400 font-bold text-xs sm:text-sm rounded-xl transition-all"><i class="fa-solid fa-puzzle-piece mr-1 text-orange-450"></i>字母碎片</button>
+                            <button onclick="toggleClozeLetters()" class="flex-1 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 hover:text-slate-200 text-slate-400 font-bold text-xs sm:text-sm rounded-xl transition-all"><i class="fa-solid fa-puzzle-piece mr-1 text-orange-400"></i>字母碎片</button>
                             <button onclick="revealClozeHint('${currentItem.chinese.replace(/'/g, "\\'")}')" class="flex-1 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 hover:text-slate-200 text-slate-400 font-bold text-xs sm:text-sm rounded-xl transition-all"><i class="fa-solid fa-lightbulb mr-1 ${theme.text}"></i>取得提示</button>
                             <button onclick="checkClozeAnswer('${qAns.replace(/'/g, "\\'")}', ${data.length}, '${fullSentence.replace(/'/g, "\\'")}')" class="flex-1 py-2 ${theme.btnTheme} font-black text-xs sm:text-sm rounded-xl flex items-center justify-center gap-1.5 shadow-lg transition-all"><i class="fa-solid fa-square-check"></i>提交解答</button>
                         </div>
                         <div id="cloze-feedback" class="hidden p-3.5 rounded-xl text-center text-sm font-bold transition-all duration-300"></div>
-                        <div id="cloze-reveal-area" class="hidden flex-col gap-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 animate-fade-in"><div class="text-xs font-extrabold text-orange-350 border-b border-slate-800/80 pb-2 flex items-center justify-between"><span>完整語境解答</span><button onclick="speakWord('${fullSentence.replace(/'/g, "\\'")}')" class="w-8 h-8 flex items-center justify-center rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 active:scale-95 transition-all shadow-md" title="朗讀完整句子"><i class="fa-solid fa-volume-high text-xs"></i></button></div><p class="text-base sm:text-lg text-slate-100 font-bold leading-relaxed">${clickableRevealSentence}</p><p class="text-xs sm:text-sm text-slate-400 font-bold leading-relaxed">${qCn}</p></div>
+                        <div id="cloze-reveal-area" class="hidden flex-col gap-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 animate-fade-in"><div class="text-xs font-extrabold text-orange-300 border-b border-slate-800/80 pb-2 flex items-center justify-between"><span>完整語境解答</span><button onclick="speakWord('${fullSentence.replace(/'/g, "\\'")}')" class="w-8 h-8 flex items-center justify-center rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 active:scale-95 transition-all shadow-md" title="朗讀完整句子"><i class="fa-solid fa-volume-high text-xs"></i></button></div><p class="text-base sm:text-lg text-slate-100 font-bold leading-relaxed">${clickableRevealSentence}</p><p class="text-xs sm:text-sm text-slate-400 font-bold leading-relaxed">${qCn}</p></div>
                         <button id="cloze-next-btn" onclick="nextClozeQuestion(${data.length})" class="hidden py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-slate-950 font-black text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/15 transition-all mt-1">進入下一填空題 <i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                 </div>
@@ -1333,7 +1357,7 @@
                 if (fullSentence) { setTimeout(() => speakWord(fullSentence), 600); setTimeout(() => nextClozeQuestion(dataLength), 5600); } else setTimeout(() => nextClozeQuestion(dataLength), 5000);
             } else {
                 playSound('wrong'); addMistake(getActiveDataList()[userState.clozeIndex], 'cloze');
-                feedback.className = "p-3.5 rounded-xl text-center text-sm font-bold bg-rose-500/10 border border-rose-500 text-rose-450"; feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1.5"></i>拼法受阻！正確填空答案應為：<span class="underline font-mono ml-1 text-white text-base">${correctAnswer}</span>`;
+                feedback.className = "p-3.5 rounded-xl text-center text-sm font-bold bg-rose-500/10 border border-rose-500 text-rose-400"; feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1.5"></i>拼法受阻！正確填空答案應為：<span class="underline font-mono ml-1 text-white text-base">${correctAnswer}</span>`;
                 userState.streak = 0; showToast(`答案不對，再接再厲！`, 'error');
                 if (fullSentence) setTimeout(() => speakWord(fullSentence), 600); nextBtn.classList.remove('hidden');
             }
@@ -1368,46 +1392,46 @@
 
             contentDiv.innerHTML = `
                 <div class="flex flex-col gap-6">
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between border-b border-slate-850 pb-4 gap-4">
-                        <div><h3 class="text-lg sm:text-xl font-black text-blue-400 flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i>修煉大典設定導入中心</h3><p class="text-xs text-slate-455 mt-1">免除繁雜步驟！在此自由導入教材與設定，並可<b>針對學員客製化非例句的填空題目</b>！</p></div>
-                        <div class="flex flex-wrap items-center gap-2 shrink-0"><span class="text-[11px] font-black bg-orange-500/10 text-orange-400 px-3 py-1.5 rounded-xl border border-orange-500/20">⛩️ 修煉大典總計: ${totalRecords} 筆</span><button onclick="lockAdminPortal()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-550 text-white rounded-xl font-black text-xs transition-all flex items-center gap-1.5 shadow-lg"><i class="fa-solid fa-lock"></i> 🔒 鎖定後台</button></div>
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between border-b border-slate-800 pb-4 gap-4">
+                        <div><h3 class="text-lg sm:text-xl font-black text-blue-400 flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i>修煉大典設定導入中心</h3><p class="text-xs text-slate-400 mt-1">免除繁雜步驟！在此自由導入教材與設定，並可<b>針對學員客製化非例句的填空題目</b>！</p></div>
+                        <div class="flex flex-wrap items-center gap-2 shrink-0"><span class="text-[11px] font-black bg-orange-500/10 text-orange-400 px-3 py-1.5 rounded-xl border border-orange-500/20">⛩️ 修煉大典總計: ${totalRecords} 筆</span><button onclick="lockAdminPortal()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-black text-xs transition-all flex items-center gap-1.5 shadow-lg"><i class="fa-solid fa-lock"></i> 🔒 鎖定後台</button></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="p-5 rounded-2xl bg-slate-900/40 border border-slate-800 flex flex-col gap-3">
-                            <div class="flex justify-between items-center"><h4 class="font-extrabold text-sm text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-folder-plus text-orange-500"></i> 智慧格式批次匯入</h4><button onclick="insertTemplateText()" class="text-[10px] text-orange-400 hover:text-orange-350 font-bold"><i class="fa-solid fa-paste mr-1"></i>帶入自訂填空匯入範本</button></div>
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-950/60 p-2.5 rounded-xl border border-slate-850">
-                                <div><label class="block text-[9px] text-orange-400 font-extrabold mb-1">目標練功房</label><select id="bulk-dojo" class="w-full px-2 py-1 bg-slate-900 border border-slate-850 rounded-lg text-xs font-bold text-slate-200 outline-none"><option value="auto">智慧判定</option><option value="vocab">單字</option><option value="phrase">片語</option><option value="affix">字根字首</option><option value="grammar">文法特訓</option><option value="exam">實戰考題</option></select></div>
-                                <div><label class="block text-[9px] text-orange-400 font-extrabold mb-1">目標難度/單元</label><select id="bulk-difficulty" class="w-full px-2 py-1 bg-slate-900 border border-slate-850 rounded-lg text-[11px] font-bold text-slate-200 outline-none custom-scrollbar">${diffOptions}</select></div>
-                                <div><label class="block text-[9px] text-orange-400 font-extrabold mb-1">目標境界</label><select id="bulk-level" class="w-full px-2 py-1 bg-slate-900 border border-slate-850 rounded-lg text-xs font-bold text-slate-200 outline-none">${levelOptions}</select></div>
-                                <div><label class="block text-[9px] text-orange-400 font-extrabold mb-1">目標章節</label><select id="bulk-unit" class="w-full px-2 py-1 bg-slate-900 border border-slate-850 rounded-lg text-xs font-bold text-slate-200 outline-none">${unitOptions}</select></div>
+                            <div class="flex justify-between items-center"><h4 class="font-extrabold text-sm text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-folder-plus text-orange-500"></i> 智慧格式批次匯入</h4><button onclick="insertTemplateText()" class="text-[10px] text-orange-400 hover:text-orange-300 font-bold"><i class="fa-solid fa-paste mr-1"></i>帶入自訂填空匯入範本</button></div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
+                                <div><label class="block text-[9px] text-orange-400 font-extrabold mb-1">目標練功房</label><select id="bulk-dojo" class="w-full px-2 py-1 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-slate-200 outline-none"><option value="auto">智慧判定</option><option value="vocab">單字</option><option value="phrase">片語</option><option value="affix">字根字首</option><option value="grammar">文法特訓</option><option value="exam">實戰考題</option></select></div>
+                                <div><label class="block text-[9px] text-orange-400 font-extrabold mb-1">目標難度/單元</label><select id="bulk-difficulty" class="w-full px-2 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[11px] font-bold text-slate-200 outline-none custom-scrollbar">${diffOptions}</select></div>
+                                <div><label class="block text-[9px] text-orange-400 font-extrabold mb-1">目標境界</label><select id="bulk-level" class="w-full px-2 py-1 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-slate-200 outline-none">${levelOptions}</select></div>
+                                <div><label class="block text-[9px] text-orange-400 font-extrabold mb-1">目標章節</label><select id="bulk-unit" class="w-full px-2 py-1 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-slate-200 outline-none">${unitOptions}</select></div>
                             </div>
-                            <textarea id="bulk-import-area" rows="6" placeholder="單字名稱 中文翻譯說明\nEg1: 英文例句\n例句中文對照\nCloze: 英文填空題 (要填處打 a______e 底線)\nClozeCn: 填空中文提示" class="w-full p-3 bg-slate-950 border border-slate-850 focus:border-orange-500 rounded-xl font-mono text-xs text-slate-300 outline-none placeholder-slate-700 resize-none transition-colors custom-scrollbar"></textarea>
-                            <div class="flex gap-3 justify-end"><button onclick="processBulkImport()" class="px-5 py-2 bg-orange-600 hover:bg-orange-550 text-slate-100 font-bold text-xs rounded-xl transition-all shadow-lg flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> 執行格式解析並匯入</button></div>
+                            <textarea id="bulk-import-area" rows="6" placeholder="單字名稱 中文翻譯說明\nEg1: 英文例句\n例句中文對照\nCloze: 英文填空題 (要填處打 a______e 底線)\nClozeCn: 填空中文提示" class="w-full p-3 bg-slate-950 border border-slate-800 focus:border-orange-500 rounded-xl font-mono text-xs text-slate-300 outline-none placeholder-slate-700 resize-none transition-colors custom-scrollbar"></textarea>
+                            <div class="flex gap-3 justify-end"><button onclick="processBulkImport()" class="px-5 py-2 bg-orange-600 hover:bg-orange-500 text-slate-100 font-bold text-xs rounded-xl transition-all shadow-lg flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> 執行格式解析並匯入</button></div>
                         </div>
                         <div class="p-5 rounded-2xl bg-slate-900/40 border border-slate-800 flex flex-col gap-3">
-                            <h4 class="font-extrabold text-sm text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-square-plus text-orange-450"></i> 手動單筆自訂新增</h4>
+                            <h4 class="font-extrabold text-sm text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-square-plus text-orange-400"></i> 手動單筆自訂新增</h4>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><input type="text" id="form-word" placeholder="英文字詞 / 片語" class="w-full px-3 py-2 bg-slate-950 border border-slate-850 rounded-lg text-xs font-semibold text-slate-100 outline-none focus:border-orange-500" /></div>
-                                <div><input type="text" id="form-chinese" placeholder="中文含義說明" class="w-full px-3 py-2 bg-slate-950 border border-slate-850 rounded-lg text-xs font-semibold text-slate-100 outline-none focus:border-orange-500" /></div>
+                                <div><input type="text" id="form-word" placeholder="英文字詞 / 片語" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs font-semibold text-slate-100 outline-none focus:border-orange-500" /></div>
+                                <div><input type="text" id="form-chinese" placeholder="中文含義說明" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs font-semibold text-slate-100 outline-none focus:border-orange-500" /></div>
                             </div>
                             <div class="grid grid-cols-4 gap-2">
-                                <select id="form-dojo" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-850 rounded-lg text-[10px] text-slate-300"><option value="vocab">單字</option><option value="phrase">片語</option><option value="affix">字根字首</option><option value="grammar">文法特訓</option><option value="exam">考題</option></select>
-                                <select id="form-difficulty" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-850 rounded-lg text-[10px] text-slate-300 custom-scrollbar">${diffOptions}</select>
-                                <select id="form-level" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-850 rounded-lg text-[10px] text-slate-300">${levelOptions}</select>
-                                <select id="form-unit" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-850 rounded-lg text-[10px] text-slate-300">${unitOptions}</select>
+                                <select id="form-dojo" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-[10px] text-slate-300"><option value="vocab">單字</option><option value="phrase">片語</option><option value="affix">字根字首</option><option value="grammar">文法特訓</option><option value="exam">考題</option></select>
+                                <select id="form-difficulty" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-[10px] text-slate-300 custom-scrollbar">${diffOptions}</select>
+                                <select id="form-level" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-[10px] text-slate-300">${levelOptions}</select>
+                                <select id="form-unit" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-[10px] text-slate-300">${unitOptions}</select>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><input type="text" id="form-example" placeholder="英文例句" class="w-full px-3 py-2 bg-slate-950 border border-slate-850 rounded-lg text-xs text-slate-100 outline-none focus:border-orange-500" /></div>
-                                <div><input type="text" id="form-example-cn" placeholder="例句中文對照" class="w-full px-3 py-2 bg-slate-950 border border-slate-850 rounded-lg text-xs text-slate-100 outline-none focus:border-orange-500" /></div>
+                                <div><input type="text" id="form-example" placeholder="英文例句" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-100 outline-none focus:border-orange-500" /></div>
+                                <div><input type="text" id="form-example-cn" placeholder="例句中文對照" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-100 outline-none focus:border-orange-500" /></div>
                             </div>
                             <div class="border-t border-slate-800/80 pt-2 flex flex-col gap-2">
-                                <div><input type="text" id="form-cloze-q" placeholder="自訂填空題專區 (單字位置請打底線，如 a______e)" class="w-full px-3 py-2 bg-slate-950 border border-slate-850 rounded-lg text-xs text-slate-100 outline-none focus:border-emerald-500" /></div>
+                                <div><input type="text" id="form-cloze-q" placeholder="自訂填空題專區 (單字位置請打底線，如 a______e)" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-100 outline-none focus:border-emerald-500" /></div>
                                 <div class="grid grid-cols-2 gap-2">
-                                    <input type="text" id="form-cloze-cn" placeholder="填空中文翻譯提示" class="w-full px-3 py-2 bg-slate-950 border border-slate-850 rounded-lg text-xs text-slate-100 outline-none focus:border-emerald-500" />
-                                    <input type="text" id="form-cloze-ans" placeholder="標準答案 (預設為對應英文字詞)" class="w-full px-3 py-2 bg-slate-950 border border-slate-850 rounded-lg text-xs text-slate-100 outline-none focus:border-emerald-500" />
+                                    <input type="text" id="form-cloze-cn" placeholder="填空中文翻譯提示" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-100 outline-none focus:border-emerald-500" />
+                                    <input type="text" id="form-cloze-ans" placeholder="標準答案 (預設為對應英文字詞)" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-100 outline-none focus:border-emerald-500" />
                                 </div>
                             </div>
-                            <div class="flex justify-end"><button onclick="saveSingleFormItem()" class="px-5 py-2.5 bg-orange-550 hover:bg-orange-650 text-slate-950 font-black text-xs rounded-xl shadow-lg flex items-center gap-1.5"><i class="fa-solid fa-square-plus text-sm"></i> 儲存此項目</button></div>
+                            <div class="flex justify-end"><button onclick="saveSingleFormItem()" class="px-5 py-2.5 bg-orange-500 hover:bg-orange-400 text-slate-950 font-black text-xs rounded-xl shadow-lg flex items-center gap-1.5"><i class="fa-solid fa-square-plus text-sm"></i> 儲存此項目</button></div>
                         </div>
                     </div>
                     
@@ -1416,22 +1440,22 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="md:col-span-2"><textarea id="github-url-input" rows="3" placeholder="請貼入 JSON 連結 (支援多行貼上多個連結)" class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-xl text-xs font-medium text-slate-200 outline-none resize-none custom-scrollbar"></textarea></div>
                             <div>
-                                <div class="flex flex-col gap-2 bg-slate-950/40 p-2 rounded-xl border border-slate-850 h-full justify-center">
-                                    <label class="flex items-center gap-1.5 text-xs text-slate-350 cursor-pointer"><input type="radio" name="github-import-mode" value="merge" checked class="accent-blue-500" /><span>合併儲存</span></label>
+                                <div class="flex flex-col gap-2 bg-slate-950/40 p-2 rounded-xl border border-slate-800 h-full justify-center">
+                                    <label class="flex items-center gap-1.5 text-xs text-slate-300 cursor-pointer"><input type="radio" name="github-import-mode" value="merge" checked class="accent-blue-500" /><span>合併儲存</span></label>
                                     <label class="flex items-center gap-1.5 text-xs text-rose-400 cursor-pointer"><input type="radio" name="github-import-mode" value="overwrite" class="accent-rose-500" /><span>覆蓋現有</span></label>
                                 </div>
                             </div>
                         </div>
                         <div class="flex gap-2 justify-end">
                             <button onclick="saveAdminSyncToGlobal()" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold text-xs rounded-xl transition-all">綁定為「首頁自動同步」網址</button>
-                            <button id="github-fetch-btn" onclick="fetchGitHubJson()" class="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5"><i class="fa-solid fa-cloud-arrow-down"></i> 啟端提取大陣</button>
+                            <button id="github-fetch-btn" onclick="fetchGitHubJson()" class="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5"><i class="fa-solid fa-cloud-arrow-down"></i> 啟動提取大陣</button>
                         </div>
                     </div>
                     
                     <div class="p-5 rounded-2xl bg-slate-900/40 border border-slate-800">
                         <div class="flex justify-between items-center mb-4 gap-3">
-                            <h4 class="font-extrabold text-sm text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-database text-orange-450"></i> 全局單字清單</h4>
-                            <button onclick="clearDatabaseSource('main')" class="px-3 py-1.5 bg-rose-500/10 text-rose-300 border border-rose-500/20 rounded-xl font-bold text-xs flex items-center gap-1"><i class="fa-solid fa-trash-can"></i> 清空修煉大典</button>
+                            <h4 class="font-extrabold text-sm text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-database text-orange-400"></i> 全局單字清單</h4>
+                            <button onclick="clearDatabaseSource()" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 rounded-xl font-bold text-xs flex items-center gap-1 transition-all"><i class="fa-solid fa-trash-can"></i> 清空修煉大典</button>
                         </div>
                         <div class="max-h-[30vh] overflow-y-auto border border-slate-800/80 rounded-xl bg-slate-950/40 p-2 custom-scrollbar">
                             <table class="w-full text-left text-xs text-slate-300">
@@ -1451,7 +1475,7 @@
         function insertTemplateText() {
             playSound('click'); document.getElementById('bulk-import-area').value = `achieve /əˈtʃiːv/ 達到、實現\nEg1: We can achieve our goals if we work hard.\n如果我們努力，就能實現目標。\nCloze: Judy study hard in order to a______e her dream of being a lawyer.\nClozeCn: 茱蒂努力讀書是為了要實現成為律師的夢想。`;
         }
-        function fillModalSampleUrl() { playSound('click'); const t = document.getElementById('modal-sync-url-input'); if (t) { t.value = DEFAULT_SYNC_URLS; showToast("已成功帶入 GitHub 測試資料庫網址！", "info"); } }
+        function fillModalSampleUrl() { playSound('click'); const t = document.getElementById('modal-sync-url-input'); if (t) { t.value = DEFAULT_SYNC_URLS; showToast("已還原預設全部 18 個 GitHub 題庫網址！", "info"); } }
         function saveAdminSyncToGlobal() {
             const url = document.getElementById('github-url-input')?.value.trim(); if (!url) return;
             userState.autoSyncUrl = url; userState.autoSyncOnLoad = true; saveProgress(); updateSyncBadgeUI(); showToast("💾 已將此雲端網址設定為首頁自動同步連結！", "success");
@@ -1465,11 +1489,13 @@
                 list.forEach(item => {
                     if ((type === 'exam' || type === 'grammar') && item.question) {
                         const targetObj = { question: String(item.question || "").trim(), options: Array.isArray(item.options) ? item.options : [], answer: String(item.answer || "").trim(), explanation: String(item.explanation || "").trim() };
-                        if (type === 'exam') normalized.exam[diffOrUnit][lvl].push(targetObj);
-                        if (type === 'grammar') normalized.grammar[diffOrUnit][lvl].push(targetObj);
+                        if (type === 'exam' && normalized.exam[diffOrUnit]?.[lvl]) normalized.exam[diffOrUnit][lvl].push(targetObj);
+                        if (type === 'grammar' && normalized.grammar[diffOrUnit]?.[lvl]) normalized.grammar[diffOrUnit][lvl].push(targetObj);
                     } else if (item && item.word) {
-                        const cleanItem = { word: String(item.word || "").trim(), chinese: String(item.chinese || item.translation || "").trim(), example: String(item.example || item.sentence || "").trim(), exampleCn: String(item.exampleCn || item.sentenceCn || "").trim(), clozeQuestion: String(item.clozeQuestion || "").trim(), clozeCn: String(item.clozeCn || "").trim(), clozeAnswer: String(item.clozeAnswer || item.word || "").trim(), unit: parseInt(item.unit) || 1, prefix: item.prefix, base: item.base, suffix: item.suffix, rule: item.rule };
-                        if(type === 'vocab') normalized.vocab[diffOrUnit][lvl].push(cleanItem); else if (type === 'phrase') normalized.phrase[lvl].push(cleanItem); else if (type === 'affix') normalized.affix[lvl].push(cleanItem);
+                        const cleanItem = { word: String(item.word || "").trim(), chinese: String(item.chinese || item.translation || "").trim(), example: String(item.example || item.sentence || "").trim(), exampleCn: String(item.exampleCn || item.sentenceCn || "").trim(), clozeQuestion: String(item.clozeQuestion || "").trim(), clozeCn: String(item.clozeCn || "").trim(), clozeAnswer: String(item.clozeAnswer || item.word || "").trim(), unit: parseInt(item.unit) || 1, prefix: item.prefix, base: item.base, suffix: item.suffix, rule: item.rule, phonetic: item.phonetic };
+                        if(type === 'vocab' && normalized.vocab[diffOrUnit]?.[lvl]) normalized.vocab[diffOrUnit][lvl].push(cleanItem);
+                        else if (type === 'phrase' && normalized.phrase[lvl]) normalized.phrase[lvl].push(cleanItem);
+                        else if (type === 'affix' && normalized.affix[lvl]) normalized.affix[lvl].push(cleanItem);
                     }
                 });
             };
@@ -1482,6 +1508,21 @@
             return normalized;
         }
 
+        function mergeNormalizedDataIntoMain(data, isOverwrite) {
+            if (!data) return;
+            VOCAB_DIFFS_DATA.forEach(d => {
+                for(let l=1; l<=10; l++) data.vocab[d.id][l].forEach(item => { if(isOverwrite || !mainDatabase.vocab[d.id][l].some(x => x.word === item.word)) mainDatabase.vocab[d.id][l].push(item); });
+                for(let l=1; l<=30; l++) data.exam[d.id][l].forEach(item => { if(isOverwrite || !mainDatabase.exam[d.id][l].some(x => x.question === item.question)) mainDatabase.exam[d.id][l].push(item); });
+            });
+            for(let l=1; l<=10; l++) {
+                data.phrase[l].forEach(item => { if(isOverwrite || !mainDatabase.phrase[l].some(x => x.word === item.word)) mainDatabase.phrase[l].push(item); });
+                data.affix[l].forEach(item => { if(isOverwrite || !mainDatabase.affix[l].some(x => x.word === item.word)) mainDatabase.affix[l].push(item); });
+            }
+            GRAMMAR_UNITS_DATA.forEach(u => {
+                for(let l=1; l<=30; l++) data.grammar[u.id][l].forEach(item => { if(isOverwrite || !mainDatabase.grammar[u.id][l].some(x => x.question === item.question)) mainDatabase.grammar[u.id][l].push(item); });
+            });
+        }
+
         async function fetchGitHubJson() {
             playSound('click'); const urlInput = document.getElementById('github-url-input'); const fetchBtn = document.getElementById('github-fetch-btn');
             if (!urlInput || !fetchBtn || !urlInput.value.trim()) return;
@@ -1489,31 +1530,16 @@
             const importMode = document.querySelector('input[name="github-import-mode"]:checked').value; 
             if (importMode === 'overwrite') mainDatabase = createEmptyDB();
             
-            let urls = urlInput.value.split('\n').map(u => u.trim()).filter(u => u.length > 0);
+            let urls = urlInput.value.split('\n').map(normalizeGithubRawUrl).filter(Boolean);
             let successCount = 0;
-            for (let rawUrl of urls) {
-                let url = /^https:\/\/github\.com\//i.test(rawUrl) ? rawUrl.replace(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/i, 'https://raw.githubusercontent.com/$1/$2/$3/$4') : rawUrl;
-                try {
-                    const res = await fetch(url);
-                    if (res.ok) {
-                        const data = normalizeImportedJson(await res.json());
-                        if (data) {
-                            VOCAB_DIFFS_DATA.forEach(d => {
-                                for(let l=1; l<=10; l++) data.vocab[d.id][l].forEach(item => { if(importMode === 'overwrite' || !mainDatabase.vocab[d.id][l].some(x => x.word === item.word)) mainDatabase.vocab[d.id][l].push(item); });
-                                for(let l=1; l<=30; l++) data.exam[d.id][l].forEach(item => { if(importMode === 'overwrite' || !mainDatabase.exam[d.id][l].some(x => x.question === item.question)) mainDatabase.exam[d.id][l].push(item); });
-                            });
-                            for(let l=1; l<=10; l++) {
-                                data.phrase[l].forEach(item => { if(importMode === 'overwrite' || !mainDatabase.phrase[l].some(x => x.word === item.word)) mainDatabase.phrase[l].push(item); });
-                                data.affix[l].forEach(item => { if(importMode === 'overwrite' || !mainDatabase.affix[l].some(x => x.word === item.word)) mainDatabase.affix[l].push(item); });
-                            }
-                            GRAMMAR_UNITS_DATA.forEach(u => {
-                                for(let l=1; l<=30; l++) data.grammar[u.id][l].forEach(item => { if(importMode === 'overwrite' || !mainDatabase.grammar[u.id][l].some(x => x.question === item.question)) mainDatabase.grammar[u.id][l].push(item); });
-                            });
-                            successCount++;
-                        }
-                    }
-                } catch(e) {}
-            }
+
+            const results = await Promise.allSettled(urls.map(url => fetch(url).then(r => r.ok ? r.json() : Promise.reject())));
+            results.forEach(res => {
+                if (res.status === 'fulfilled' && res.value) {
+                    const data = normalizeImportedJson(res.value);
+                    if (data) { mergeNormalizedDataIntoMain(data, false); successCount++; }
+                }
+            });
 
             if (successCount > 0) {
                 playSound('levelUp'); showToast(`成功提取 ${successCount} 個雲端法陣！`, "success");
@@ -1522,36 +1548,38 @@
             fetchBtn.disabled = false; fetchBtn.innerHTML = origBtnHtml;
         }
 
+        // 併發自動讀取所有 GitHub 檔案，無須手動切換
         async function backgroundSync(rawUrlStr, mode) {
             if (!rawUrlStr) return;
-            let urls = rawUrlStr.split('\n').map(u => u.trim()).filter(u => u.length > 0);
-            let syncedAnything = false;
-            for (let rawUrl of urls) {
-                let url = /^https:\/\/github\.com\//i.test(rawUrl) ? rawUrl.replace(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/i, 'https://raw.githubusercontent.com/$1/$2/$3/$4') : rawUrl;
-                try {
-                    const res = await fetch(url);
-                    if (res.ok) {
-                        if (mode === 'overwrite' && !syncedAnything) mainDatabase = createEmptyDB();
-                        const data = normalizeImportedJson(await res.json());
-                        if (data) {
-                            VOCAB_DIFFS_DATA.forEach(d => {
-                                for(let l=1; l<=10; l++) data.vocab[d.id][l].forEach(item => { if(!mainDatabase.vocab[d.id][l].some(x => x.word === item.word)) mainDatabase.vocab[d.id][l].push(item); });
-                                for(let l=1; l<=30; l++) data.exam[d.id][l].forEach(item => { if(!mainDatabase.exam[d.id][l].some(x => x.question === item.question)) mainDatabase.exam[d.id][l].push(item); });
-                            });
-                            for(let l=1; l<=10; l++) {
-                                data.phrase[l].forEach(item => { if(!mainDatabase.phrase[l].some(x => x.word === item.word)) mainDatabase.phrase[l].push(item); });
-                                data.affix[l].forEach(item => { if(!mainDatabase.affix[l].some(x => x.word === item.word)) mainDatabase.affix[l].push(item); });
-                            }
-                            GRAMMAR_UNITS_DATA.forEach(u => {
-                                for(let l=1; l<=30; l++) data.grammar[u.id][l].forEach(item => { if(!mainDatabase.grammar[u.id][l].some(x => x.question === item.question)) mainDatabase.grammar[u.id][l].push(item); });
-                            });
-                            syncedAnything = true;
-                        }
-                    }
-                } catch(e) {}
+            const syncIcon = document.getElementById('header-sync-icon'), syncStatus = document.getElementById('header-sync-status');
+            if (syncIcon && syncStatus) {
+                syncIcon.className = "fa-solid fa-arrows-rotate animate-spin text-blue-400";
+                syncStatus.textContent = "雲端同步中...";
+                syncStatus.className = "text-[11px] font-bold text-blue-400";
             }
-            if (syncedAnything) { saveProgress(); renderContent(); showToast("背景同步合併完成", "success"); }
-            setTimeout(updateSyncBadgeUI, 2000);
+
+            let urls = rawUrlStr.split('\n').map(normalizeGithubRawUrl).filter(Boolean);
+            let syncedCount = 0;
+
+            if (mode === 'overwrite') mainDatabase = createEmptyDB();
+
+            const results = await Promise.allSettled(urls.map(url => fetch(url).then(r => r.ok ? r.json() : Promise.reject())));
+            results.forEach(res => {
+                if (res.status === 'fulfilled' && res.value) {
+                    const data = normalizeImportedJson(res.value);
+                    if (data) {
+                        mergeNormalizedDataIntoMain(data, false);
+                        syncedCount++;
+                    }
+                }
+            });
+
+            if (syncedCount > 0) {
+                saveProgress();
+                renderContent();
+                showToast(`☁️ 已自動載入 ${syncedCount} 個 GitHub 雲端題庫！`, "success");
+            }
+            updateSyncBadgeUI();
         }
 
         function openSyncSettingsModal() {
@@ -1570,8 +1598,8 @@
             if (!syncIcon || !syncStatus || !syncBadge) return;
             syncBadge.className = "flex items-center gap-2 px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded-xl cursor-pointer transition-all active:scale-95 text-slate-400 hover:text-blue-400 group";
             if (userState.autoSyncUrl && userState.autoSyncUrl.trim() !== "") {
-                syncIcon.className = "fa-solid fa-cloud-arrow-down text-blue-455"; syncStatus.textContent = "已連線"; syncStatus.className = "text-[11px] font-bold text-blue-455";
-            } else { syncIcon.className = "fa-solid fa-cloud text-slate-550"; syncStatus.textContent = "手動修行"; syncStatus.className = "text-[11px] font-bold text-slate-400"; }
+                syncIcon.className = "fa-solid fa-cloud-arrow-down text-blue-400"; syncStatus.textContent = "雲端已同步"; syncStatus.className = "text-[11px] font-bold text-blue-400";
+            } else { syncIcon.className = "fa-solid fa-cloud text-slate-500"; syncStatus.textContent = "手動修行"; syncStatus.className = "text-[11px] font-bold text-slate-400"; }
         }
 
         function saveAndTriggerSync() {
@@ -1605,7 +1633,7 @@
                     }
                 }
             });
-            if (added > 0) { ta.value = ""; saveProgress(); showToast(`成功解析匯入！`, "success"); }
+            if (added > 0) { ta.value = ""; saveProgress(); renderAdminTab(); showToast(`成功解析匯入 ${added} 筆資料！`, "success"); }
         }
 
         function saveSingleFormItem() {
@@ -1614,28 +1642,42 @@
             const item = { word: w, chinese: c, example: document.getElementById('form-example').value.trim(), exampleCn: document.getElementById('form-example-cn').value.trim(), clozeQuestion: document.getElementById('form-cloze-q').value.trim(), clozeCn: document.getElementById('form-cloze-cn').value.trim(), clozeAnswer: document.getElementById('form-cloze-ans').value.trim() || w, unit: unit };
             
             if(dojo==='vocab') mainDatabase.vocab[diff][lvl].push(item); else if(dojo==='phrase') mainDatabase.phrase[lvl].push(item); else if(dojo==='affix') mainDatabase.affix[lvl].push(item); else if(dojo==='grammar') mainDatabase.grammar[diff][lvl].push(item);
-            saveProgress(); showToast("單字儲存成功！", "success");
+            saveProgress(); renderAdminTab(); showToast("單字儲存成功！", "success");
         }
 
         function renderCustomLibraryTable() {
-            const tbody = document.getElementById('custom-library-tbody'); if (!tbody) return; tbody.innerHTML = '';
+            const tbody = document.getElementById('custom-library-tbody'); if (!tbody) return;
+            let rowsHtml = '';
             VOCAB_DIFFS_DATA.forEach(d => {
-                for (let l = 1; l <= 10; l++) (mainDatabase.vocab[d.id]?.[l] || []).forEach((item, idx) => tbody.innerHTML += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-slate-100 font-bold">${item.word}</td><td class="py-2.5 px-3 text-slate-300 truncate">${item.chinese}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">單字 ${d.id} L${l} U${item.unit}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('vocab', '${d.id}', ${l}, ${idx})" class="text-rose-450 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
-                for (let l = 1; l <= 30; l++) (mainDatabase.exam[d.id]?.[l] || []).forEach((item, idx) => tbody.innerHTML += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-purple-300 font-bold truncate max-w-[150px]">${item.question}</td><td class="py-2.5 px-3 text-slate-300 truncate max-w-[150px]">解答: ${item.answer}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">考題 ${d.id} L${l}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('exam', '${d.id}', ${l}, ${idx})" class="text-rose-450 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
+                for (let l = 1; l <= 10; l++) (mainDatabase.vocab[d.id]?.[l] || []).forEach((item, idx) => rowsHtml += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-slate-100 font-bold">${item.word}</td><td class="py-2.5 px-3 text-slate-300 truncate">${item.chinese}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">單字 ${d.id} L${l} U${item.unit}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('vocab', '${d.id}', ${l}, ${idx})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
+                for (let l = 1; l <= 30; l++) (mainDatabase.exam[d.id]?.[l] || []).forEach((item, idx) => rowsHtml += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-purple-300 font-bold truncate max-w-[150px]">${item.question}</td><td class="py-2.5 px-3 text-slate-300 truncate max-w-[150px]">解答: ${item.answer}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">考題 ${d.id} L${l}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('exam', '${d.id}', ${l}, ${idx})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
             });
             for (let l = 1; l <= 10; l++) {
-                (mainDatabase.phrase?.[l] || []).forEach((item, idx) => tbody.innerHTML += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-blue-300 font-bold">${item.word}</td><td class="py-2.5 px-3 text-slate-300 truncate">${item.chinese}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">片語 L${l} U${item.unit}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('phrase', null, ${l}, ${idx})" class="text-rose-450 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
-                (mainDatabase.affix?.[l] || []).forEach((item, idx) => tbody.innerHTML += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-emerald-300 font-bold">${item.word}</td><td class="py-2.5 px-3 text-slate-300 truncate">${item.chinese}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">字根字首 L${l}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('affix', null, ${l}, ${idx})" class="text-rose-450 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
+                (mainDatabase.phrase?.[l] || []).forEach((item, idx) => rowsHtml += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-blue-300 font-bold">${item.word}</td><td class="py-2.5 px-3 text-slate-300 truncate">${item.chinese}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">片語 L${l} U${item.unit}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('phrase', null, ${l}, ${idx})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
+                (mainDatabase.affix?.[l] || []).forEach((item, idx) => rowsHtml += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-emerald-300 font-bold">${item.word}</td><td class="py-2.5 px-3 text-slate-300 truncate">${item.chinese}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">字根字首 L${l}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('affix', null, ${l}, ${idx})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
             }
             GRAMMAR_UNITS_DATA.forEach(unit => {
-                for (let l = 1; l <= 30; l++) (mainDatabase.grammar[unit.id]?.[l] || []).forEach((item, idx) => tbody.innerHTML += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-rose-300 font-bold truncate max-w-[150px]">${item.question || item.word}</td><td class="py-2.5 px-3 text-slate-300 truncate max-w-[150px]">解答: ${item.answer || item.chinese}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">文法 ${unit.id} L${l}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('grammar', '${unit.id}', ${l}, ${idx})" class="text-rose-450 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
+                for (let l = 1; l <= 30; l++) (mainDatabase.grammar[unit.id]?.[l] || []).forEach((item, idx) => rowsHtml += `<tr class="border-b border-slate-900/60"><td class="py-2.5 px-3 text-rose-300 font-bold truncate max-w-[150px]">${item.question || item.word}</td><td class="py-2.5 px-3 text-slate-300 truncate max-w-[150px]">解答: ${item.answer || item.chinese}</td><td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-900 border border-slate-800">文法 ${unit.id} L${l}</span></td><td class="py-2.5 px-3 text-center"><button onclick="deleteDatabaseItem('grammar', '${unit.id}', ${l}, ${idx})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
             });
+            tbody.innerHTML = rowsHtml;
         }
         
         function deleteDatabaseItem(dojo, diff, lvl, idx) { 
             playSound('wrong'); 
             if(dojo==='vocab') mainDatabase.vocab[diff][lvl].splice(idx,1); else if(dojo==='phrase') mainDatabase.phrase[lvl].splice(idx,1); else if(dojo==='affix') mainDatabase.affix[lvl].splice(idx,1); else if(dojo==='exam') mainDatabase.exam[diff][lvl].splice(idx,1); else if(dojo==='grammar') mainDatabase.grammar[diff][lvl].splice(idx,1);
             saveProgress(); renderCustomLibraryTable(); 
+        }
+
+        function clearDatabaseSource() {
+            playSound('click'); const modal = document.getElementById('custom-confirm-modal');
+            document.getElementById('confirm-modal-title').textContent = "確定清空整個修煉大典？";
+            document.getElementById('confirm-modal-desc').textContent = "此操作將會抹除本機快取中的所有字彙與考題紀錄（重新整理網頁可再次由 GitHub 自動同步）。";
+            modal.classList.remove('pointer-events-none', 'opacity-0'); modal.firstElementChild.classList.remove('scale-95');
+            document.getElementById('confirm-modal-cancel').onclick = () => { playSound('click'); modal.classList.add('pointer-events-none', 'opacity-0'); modal.firstElementChild.classList.add('scale-95'); };
+            document.getElementById('confirm-modal-proceed').onclick = () => {
+                playSound('wrong'); mainDatabase = createEmptyDB(); saveProgress(); renderAdminTab();
+                modal.classList.add('pointer-events-none', 'opacity-0'); modal.firstElementChild.classList.add('scale-95'); showToast("修煉大典已完全淨化清空！", "error");
+            };
         }
 
         function openStatsModal() {
@@ -1657,8 +1699,11 @@
             modal.classList.remove('pointer-events-none', 'opacity-0'); modal.firstElementChild.classList.remove('scale-95');
             document.getElementById('confirm-modal-cancel').onclick = () => { playSound('click'); modal.classList.add('pointer-events-none', 'opacity-0'); modal.firstElementChild.classList.add('scale-95'); };
             document.getElementById('confirm-modal-proceed').onclick = () => {
-                playSound('wrong'); mainDatabase = createEmptyDB(); saveProgress(); renderCustomLibraryTable();
-                modal.classList.add('pointer-events-none', 'opacity-0'); modal.firstElementChild.classList.add('scale-95'); showToast("修煉大典已完全淨化清空！", "error");
+                playSound('wrong');
+                userState.totalAnswered = 0; userState.correctCount = 0; userState.streak = 0; userState.highestStreak = 0; userState.exp = 0;
+                saveProgress(); updateHeaderUI(); openStatsModal();
+                modal.classList.add('pointer-events-none', 'opacity-0'); modal.firstElementChild.classList.add('scale-95');
+                showToast("修煉統計數據已重置歸零！", "info");
             };
         }
 
@@ -1681,7 +1726,8 @@
             loadProgress(); const urlSync = new URLSearchParams(window.location.search).get('sync');
             if (urlSync) { userState.autoSyncUrl = urlSync.trim(); userState.autoSyncOnLoad = true; saveProgress(); window.history.pushState({}, '', window.location.pathname); }
             updateDojoTabUI(); renderDifficultySelector(); renderLevelSelector(); renderUnitSelector(); renderContent(); updateHeaderUI(); updateTabButtonsUI(); updateSyncBadgeUI(); updateVoicePanelUI();
-            if (userState.autoSyncOnLoad && userState.autoSyncUrl) backgroundSync(userState.autoSyncUrl, userState.autoSyncMode);
+            // 網頁載入時無條件自動同步所有 GitHub 題庫檔案
+            backgroundSync(userState.autoSyncUrl || DEFAULT_SYNC_URLS, userState.autoSyncMode || "merge");
             setTimeout(() => { openWelcomeGuide(); }, 600);
         };
     </script>
