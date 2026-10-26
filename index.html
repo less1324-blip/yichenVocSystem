@@ -495,14 +495,24 @@
         let globalAudioCtx = null;
         function initAudioContext() {
             try {
-                if (!globalAudioCtx) globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (globalAudioCtx.state === 'suspended') globalAudioCtx.resume();
+                if (!globalAudioCtx) {
+                    globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (globalAudioCtx.state === 'suspended') {
+                    globalAudioCtx.resume();
+                }
             } catch (e) {}
             return globalAudioCtx;
         }
 
-        document.addEventListener('click', initAudioContext, { once: true });
-        document.addEventListener('touchstart', initAudioContext, { once: true });
+        // 補強：讓手機每次點擊或觸碰時都持續確保音效解鎖
+        document.addEventListener('click', () => {
+            initAudioContext();
+        }, { once: false });
+
+        document.addEventListener('touchstart', () => {
+            initAudioContext();
+        }, { once: false });
 
         function playSound(type) {
             try {
